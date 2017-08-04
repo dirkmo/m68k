@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP M68SEC000
+D Microprocesseur bus 16 bits
+K MPRO
+$ENDCMP
+#
+#End Doc Library
