@@ -45,9 +45,14 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Sheet
-S 1150 1000 1900 2200
+S 2050 850  1900 2200
 U 59846BBA
 F0 "cpu" 60
 F1 "cpu.sch" 60
+F2 "DTACK_N" I L 2050 1050 60 
 $EndSheet
+Wire Wire Line
+	2050 1050 1450 1050
+Text Label 1450 1050 2    60   ~ 0
+CPU_DTACK_N
 $EndSCHEMATC

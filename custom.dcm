@@ -1,5 +1,10 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP AS6C4008
+D SRAM 512k x 8
+K SRAM
+$ENDCMP
+#
 $CMP M68SEC000
 D Microprocesseur bus 16 bits
 K MPRO
