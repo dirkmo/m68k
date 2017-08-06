@@ -10,4 +10,9 @@ D Microprocesseur bus 16 bits
 K MPRO
 $ENDCMP
 #
+$CMP XC9572XL-VQ44
+D Xilinx XC 9572XL-VQ44
+K Xilinx CPLD XC9572XL
+$ENDCMP
+#
 #End Doc Library
