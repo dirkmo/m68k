@@ -1,4 +1,4 @@
-update=Fr 04 Aug 2017 12:49:55 CEST
+update=Dienstag, 08. August 2017 'u12' 14:12:35
 version=1
 last_client=kicad
 [pcbnew]
@@ -27,7 +27,7 @@ NetIExt=net
 version=1
 [eeschema]
 version=1
-LibDir=
+LibDir=/Users/dirk/kicad/kicad-library/library
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -59,3 +59,4 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=custom
+LibName31=switches
