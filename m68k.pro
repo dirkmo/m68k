@@ -1,4 +1,4 @@
-update=Mittwoch, 09. August 2017 'u59' 22:59:05
+update=Donnerstag, 10. August 2017 'u27' 21:27:03
 version=1
 last_client=kicad
 [pcbnew]
@@ -60,4 +60,3 @@ LibName28=contrib
 LibName29=valves
 LibName30=custom
 LibName31=switches
-LibName32=ok-ic-memory

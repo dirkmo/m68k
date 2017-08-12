@@ -319,17 +319,6 @@ F 3 "" H 5850 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L XC9572XL-VQ44 U6
-U 1 1 59881A68
-P 10350 2650
-F 0 "U6" H 10550 4100 60  0000 C CNN
-F 1 "XC9572XL-VQ44" H 10300 1150 60  0000 C CNN
-F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 10300 2250 60  0001 C CNN
-F 3 "" H 10300 2250 60  0001 C CNN
-	1    10350 2650
-	1    0    0    -1  
-$EndComp
-$Comp
 L C_Small C10
 U 1 1 59881A6F
 P 9500 3350
@@ -381,17 +370,17 @@ Text Label 9550 2450 2    60   ~ 0
 TDO
 Text Label 9550 2550 2    60   ~ 0
 TMS
-Text Label 10850 3550 0    60   ~ 0
+Text Label 10850 3350 0    60   ~ 0
 A20
-Text Label 10850 3650 0    60   ~ 0
+Text Label 10850 3450 0    60   ~ 0
 A21
 Text Label 10850 1950 0    60   ~ 0
 ~BERR
 Text Label 10850 1450 0    60   ~ 0
 R/~W
-Text Label 10850 3750 0    60   ~ 0
+Text Label 10850 3550 0    60   ~ 0
 A22
-Text Label 10850 3850 0    60   ~ 0
+Text Label 10850 3650 0    60   ~ 0
 A23
 Text Label 4700 3400 2    60   ~ 0
 R/~W
@@ -1127,19 +1116,19 @@ Text Label 10550 5900 0    60   ~ 0
 A22
 Text Label 10050 6000 2    60   ~ 0
 A23
-Text Label 10850 2850 0    60   ~ 0
+Text Label 10850 2650 0    60   ~ 0
 A13
-Text Label 10850 2950 0    60   ~ 0
+Text Label 10850 2750 0    60   ~ 0
 A14
-Text Label 10850 3050 0    60   ~ 0
+Text Label 10850 2850 0    60   ~ 0
 A15
-Text Label 10850 3150 0    60   ~ 0
+Text Label 10850 2950 0    60   ~ 0
 A16
-Text Label 10850 3250 0    60   ~ 0
+Text Label 10850 3050 0    60   ~ 0
 A17
-Text Label 10850 3350 0    60   ~ 0
+Text Label 10850 3150 0    60   ~ 0
 A18
-Text Label 10850 3450 0    60   ~ 0
+Text Label 10850 3250 0    60   ~ 0
 A19
 Text Label 10850 2450 0    60   ~ 0
 BOOT
@@ -1415,7 +1404,7 @@ U 1 1 598B5339
 P 5150 2350
 F 0 "U2" H 5250 3450 60  0000 C CNN
 F 1 "AS6C8016" H 5150 900 60  0000 C CNN
-F 2 "Housings_SSOP:TSSOP-44_4.4x11.2mm_Pitch0.5mm" H 5150 2350 60  0001 C CNN
+F 2 "custom:TSOP44" H 5150 2350 60  0001 C CNN
 F 3 "" H 5150 2350 60  0001 C CNN
 	1    5150 2350
 	1    0    0    -1  
@@ -1595,12 +1584,6 @@ F 3 "" H 3250 6650 50  0001 C CNN
 	1    3250 6650
 	1    0    0    -1  
 $EndComp
-NoConn ~ 12500 2650
-NoConn ~ 12500 2750
-NoConn ~ 12500 2850
-NoConn ~ 12500 2950
-NoConn ~ 12500 3050
-NoConn ~ 12500 3150
 NoConn ~ 13500 2450
 NoConn ~ 13500 4650
 NoConn ~ 13500 4750
@@ -1646,13 +1629,6 @@ Wire Wire Line
 Wire Wire Line
 	2200 6800 2550 6800
 NoConn ~ 9750 1450
-NoConn ~ 9750 1650
-NoConn ~ 9750 1750
-NoConn ~ 9750 1850
-NoConn ~ 10850 2650
-NoConn ~ 10850 2750
-NoConn ~ 10850 3950
-NoConn ~ 10850 4050
 Connection ~ 9750 3500
 Connection ~ 9750 3450
 Connection ~ 9750 3350
@@ -1705,11 +1681,7 @@ F 3 "" H 10300 5650 50  0001 C CNN
 	1    10300 6150
 	1    0    0    -1  
 $EndComp
-NoConn ~ 10050 7400
-NoConn ~ 10050 7500
 NoConn ~ 10050 7600
-NoConn ~ 10550 7400
-NoConn ~ 10550 7500
 NoConn ~ 10550 7600
 $Comp
 L R_Network10 RN1
@@ -1734,4 +1706,97 @@ Wire Notes Line
 	14500 6300 11950 6300
 Wire Notes Line
 	11950 6300 11950 1750
+$Comp
+L LED D1
+U 1 1 598F0960
+P 6350 5400
+F 0 "D1" H 6350 5500 50  0000 C CNN
+F 1 "LED" H 6350 5300 50  0000 C CNN
+F 2 "LEDs:LED_0805" H 6350 5400 50  0001 C CNN
+F 3 "" H 6350 5400 50  0001 C CNN
+	1    6350 5400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R_Small R1
+U 1 1 598F0A1F
+P 6350 5150
+F 0 "R1" H 6380 5170 50  0000 L CNN
+F 1 "750" H 6380 5110 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" H 6350 5150 50  0001 C CNN
+F 3 "" H 6350 5150 50  0001 C CNN
+	1    6350 5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR034
+U 1 1 598F0AC4
+P 6350 5550
+F 0 "#PWR034" H 6350 5300 50  0001 C CNN
+F 1 "GND" H 6350 5400 50  0000 C CNN
+F 2 "" H 6350 5550 50  0001 C CNN
+F 3 "" H 6350 5550 50  0001 C CNN
+	1    6350 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3V3 #PWR035
+U 1 1 598F0C18
+P 6350 5050
+F 0 "#PWR035" H 6350 4900 50  0001 C CNN
+F 1 "+3V3" H 6350 5190 50  0000 C CNN
+F 2 "" H 6350 5050 50  0001 C CNN
+F 3 "" H 6350 5050 50  0001 C CNN
+	1    6350 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X06 J?
+U 1 1 598F1D1B
+P 12300 2900
+F 0 "J?" H 12300 3250 50  0000 C CNN
+F 1 "CONN_01X06" V 12400 2900 50  0000 C CNN
+F 2 "" H 12300 2900 50  0001 C CNN
+F 3 "" H 12300 2900 50  0001 C CNN
+	1    12300 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L XC9572XL-VQ44 U6
+U 1 1 59881A68
+P 10350 2650
+F 0 "U6" H 10550 4100 60  0000 C CNN
+F 1 "XC9572XL-VQ44" H 10300 1150 60  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 10300 2250 60  0001 C CNN
+F 3 "" H 10300 2250 60  0001 C CNN
+	1    10350 2650
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X03 J?
+U 1 1 598F47DA
+P 9550 1750
+F 0 "J?" H 9550 1950 50  0000 C CNN
+F 1 "CONN_01X03" V 9650 1750 50  0000 C CNN
+F 2 "" H 9550 1750 50  0001 C CNN
+F 3 "" H 9550 1750 50  0001 C CNN
+	1    9550 1750
+	-1   0    0    1   
+$EndComp
+Text Label 10850 3750 0    60   ~ 0
+CS0
+Text Label 10850 3850 0    60   ~ 0
+CS1
+Text Label 10850 3950 0    60   ~ 0
+CS2
+Text Label 10850 4050 0    60   ~ 0
+CS3
+Text Label 10050 7400 2    60   ~ 0
+CS0
+Text Label 10050 7500 2    60   ~ 0
+CS2
+Text Label 10550 7400 0    60   ~ 0
+CS1
+Text Label 10550 7500 0    60   ~ 0
+CS3
 $EndSCHEMATC
