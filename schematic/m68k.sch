@@ -392,7 +392,7 @@ Text Label 10850 1750 0    60   ~ 0
 ~LDS
 Text Label 10850 1850 0    60   ~ 0
 ~UDS
-Text Label 9750 1350 2    60   ~ 0
+Text Label 9750 1550 2    60   ~ 0
 CLK_50MHz
 $Comp
 L CONN_01X06 J3
@@ -1548,7 +1548,7 @@ Wire Wire Line
 	6050 3300 6050 3400
 Wire Wire Line
 	6050 3700 6050 3600
-Text Label 9750 1550 2    60   ~ 0
+Text Label 9750 1350 2    60   ~ 0
 CLK_16MHz
 $Comp
 L PWR_FLAG #FLG030
