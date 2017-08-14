@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module m68kdecoder(
     input clk50,
     input clk16,
@@ -19,6 +21,7 @@ module m68kdecoder(
 );
 
 wire [23:0] a = { addr[23:13], 13'd0 };
+wire ds_n = uds_n & lds_n;
 
 // oe_n must be held high when in bootloader mode
 assign oe_n = boot ? 1'b1 : ~rw;
@@ -38,12 +41,15 @@ localparam
 
 always @(*) begin
     cs = DEV_NONE;
-    if( a < 'h00_4000 ) begin
-        cs = DEV_EEPROM;
-    end else if( a < 'h01_0000 ) begin
-        cs = DEV_RAM;
-    end else begin
-        cs = DEV_OTHER;
+    if( ~as_n ) begin
+        if( a < 'h00_4000 ) begin
+            cs = DEV_EEPROM;
+        end else if( a < 'h01_0000 ) begin
+            cs = DEV_RAM;
+        end else begin
+            // no bus error handling atm
+            cs = DEV_OTHER;
+        end
     end
 end
 
@@ -51,32 +57,71 @@ assign berr_n = as_n ? 1'b1 : ( cs != DEV_NONE );
 
 //---------------------------------------------------------------
 // dtack generation
-reg [3:0] dtack_counter;
-assign dtack_n = cs > DEV_RAM ? 1'bz : (dtack_counter != 'd0);
 
-// dtack_trig handling
-reg dtack_trig_old;
-always @(posedge clk16) dtack_trig_old <= dtack_trig;
-wire dtack_trig_pe = { dtack_trig_old , dtack_trig } == 2'b01; // rising edge
+// state machine registers
+reg [1:0] state;
+reg [1:0] next_state;
+localparam IDLE = 2'd0, COUNT = 2'd1, DTACK = 2'd2;
+
+reg [2:0] dtack_counter; // wait counter until dtack
+reg [2:0] next_dtack_counter;
+
+reg dtack_reg; // actual dtack output value register
+// output dtack_reg when when state is non-zero. Make dtack hi-z when state=0
+assign dtack_n = state == 'd0 ? 1'bz : dtack_reg;
+
+// dtack_trig handling, rising edge detection
+reg [1:0] dtack_trig_old;
+always @(posedge clk16) dtack_trig_old[1:0] <= { dtack_trig_old[0], dtack_trig };
+wire dtack_trig_pe = (dtack_trig_old[1:0] == 2'b01); // rising edge
 
 always @(posedge clk16)
 begin
-    if( boot ) begin
-        if(dtack_trig_pe) begin
-            dtack_counter <= 'd4;
-        end
-    end else if ( cs == DEV_EEPROM ) begin
-        // eeprom read time 200ns. 16 MHz = 62.5ns
-        // 200ns / 62.5ns = 3.2
-        dtack_counter <= 'd4;
-    end else if( cs == DEV_RAM ) begin
-        // instant access to ram
-        dtack_counter <= 'd0;
-    end else begin
-        if( dtack_counter > 'd0 ) begin
-            dtack_counter <= dtack_counter - 1;
-        end
+    state <= next_state;
+    dtack_counter <= next_dtack_counter;
+    if( as_n == 1'b1 ) begin
+        state <= 'd0;
     end
+end
+
+always @(*)
+begin
+    next_state = state;
+    next_dtack_counter = dtack_counter;
+    dtack_reg = 1'b1;
+    case( state )
+        IDLE: begin // wait for dtack cycle start
+            if( boot ) begin
+                if( dtack_trig_pe ) begin
+                    next_dtack_counter = 'd4;
+                    next_state = COUNT;
+                end
+            end else if ( ds_n == 1'b0 ) begin
+                if( cs == DEV_EEPROM ) begin
+                    // eeprom is slow, 200 ns access time for reading
+                    next_dtack_counter = 'd4;
+                    next_state = COUNT;
+                end else if( cs == DEV_RAM ) begin
+                    // RAM is fast, got directly to dtack state
+                    next_state = DTACK;
+                end
+            end
+        end
+        COUNT: begin // count down to zero
+            if( dtack_counter == 'd0 ) begin
+                next_state = DTACK;
+            end else begin
+                next_dtack_counter = dtack_counter - 1;
+            end
+        end
+        DTACK: begin // dtack as long as ds_n is active
+            if( ds_n == 1'b0 ) begin
+                dtack_reg = 1'b0;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+    endcase
 end
 
 //---------------------------------------------------------------
@@ -91,6 +136,8 @@ begin
 end
 
 initial begin
+    clkgen_counter = 0;
+    dtack_counter = 0;
 end
 
 endmodule

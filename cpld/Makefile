@@ -3,4 +3,4 @@ all:
 
 sim: all
 	./m68k
-	gtkwave dump.vcd config.gtkw &
+	/opt/local/bin/gtkwave dump.vcd config.gtkw &
