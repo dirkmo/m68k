@@ -1,6 +1,7 @@
 `timescale 1ns/1ns
 
 module m68kdecoder(
+    input reset_n,
     input clk50,
     input clk16,
     inout dtack_n,
@@ -33,6 +34,16 @@ assign ram_ce_n = (cs == DEV_RAM) ? uds_n & lds_n : 1'b1;
 //---------------------------------------------------------------
 // address decoding
 
+// memory map:
+//        0..0x003FFF EEPROM (only after reset, masks RAM until first write to it)
+//        0..0x0FFFFF RAM (first 0x4000 bytes are overlaid by eeprom after reset)
+// 0x100000..0x104000 EEPROM
+
+// at first power up, eeprom overlays ram at address 0. When cpu tries to write there,
+// eeprom will be masked out and is only available at address 0x100000 (right after RAM).
+
+reg eeprom_at_zero_n; // 0: eeprom starts at address 0, 1: RAM at address 0.
+
 localparam
     DEV_NONE = 0,
     DEV_EEPROM = 1,
@@ -42,14 +53,27 @@ localparam
 always @(*) begin
     cs = DEV_NONE;
     if( ~as_n ) begin
-        if( a < 'h00_4000 ) begin
+        if( a < 'h00_4000 && ~eeprom_at_zero_n && ~rw ) begin
             cs = DEV_EEPROM;
-        end else if( a < 'h01_0000 ) begin
+        end else if( a < 'h10_0000 ) begin
             cs = DEV_RAM;
+        end else if( a < 'h10_4000 ) begin
+            cs = DEV_EEPROM;
         end else begin
             // no bus error handling atm
             cs = DEV_OTHER;
         end
+    end
+end
+
+always @(posedge clk16)
+begin
+    if( reset_n ) begin
+        // eeprom at address 0
+        eeprom_at_zero_n = 1'b0;
+    end else if( a < 'h00_4000 && ~eeprom_at_zero_n && ~rw) begin
+        // no eeprom at 0 anymore
+        eeprom_at_zero_n <= 1'b1;
     end
 end
 

@@ -2,6 +2,7 @@
 
 module bench();
 
+reg reset_n;
 reg clk50;
 reg clk16;
 reg as_n;
@@ -22,6 +23,7 @@ wire clk_from_cpld;
 wire [3:0] cs;
 
 m68kdecoder decoder(
+     .reset_n(reset_n),
      .clk50(clk50),
      .clk16(clk16),
      .dtack_n(dtack_n),
@@ -52,6 +54,7 @@ localparam
 
 initial begin
     $dumpvars;
+    reset_n = 1;
     clk50 = 0;
     clk16 = 0;
     as_n = 1;
