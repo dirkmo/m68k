@@ -54,7 +54,7 @@ localparam
 
 initial begin
     $dumpvars;
-    reset_n = 1;
+    reset_n = 0;
     clk50 = 0;
     clk16 = 0;
     as_n = 1;
@@ -64,6 +64,8 @@ initial begin
     boot = 0;
     dtack_trig = 0;
     addr = 0;
+    #50;
+    reset_n = 1;
     #50;
 
     // dtack tests
@@ -76,6 +78,28 @@ initial begin
     
     #450;
     uds_n = 1;
+
+    #100;
+    // write access on 0, should hide eeprom
+    rw = 0;
+    uds_n = 0;
+    addr = 0;
+    #100;
+    uds_n = 1;
+    rw = 1;
+    #100;
+    uds_n = 0;
+    addr = 0;
+    #100;
+    uds_n = 1;
+    #50;
+
+    boot = 1;
+    uds_n = 0;
+    rw = 0;
+    #400;
+    uds_n = 1;
+
 
     #100;
     as_n = 1;
@@ -103,6 +127,8 @@ initial begin
     uds_n = 1;
     as_n = 1;
     #100;
+
+
 
     $finish;
 end

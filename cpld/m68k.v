@@ -35,8 +35,8 @@ assign ram_ce_n = (cs == DEV_RAM) ? uds_n & lds_n : 1'b1;
 // address decoding
 
 // memory map:
-//        0..0x003FFF EEPROM (only after reset, masks RAM until first write to it)
-//        0..0x0FFFFF RAM (first 0x4000 bytes are overlaid by eeprom after reset)
+//        0..0x003FFF EEPROM (only after reset, masks RAM until first write to this range)
+//        0..0x0FFFFF RAM
 // 0x100000..0x104000 EEPROM
 
 // at first power up, eeprom overlays ram at address 0. When cpu tries to write there,
@@ -53,7 +53,7 @@ localparam
 always @(*) begin
     cs = DEV_NONE;
     if( ~as_n ) begin
-        if( a < 'h00_4000 && ~eeprom_at_zero_n && ~rw ) begin
+        if( a < 'h00_4000 && ((~eeprom_at_zero_n && rw) || boot) ) begin
             cs = DEV_EEPROM;
         end else if( a < 'h10_0000 ) begin
             cs = DEV_RAM;
@@ -68,10 +68,10 @@ end
 
 always @(posedge clk16)
 begin
-    if( reset_n ) begin
+    if( ~reset_n ) begin
         // eeprom at address 0
         eeprom_at_zero_n = 1'b0;
-    end else if( a < 'h00_4000 && ~eeprom_at_zero_n && ~rw) begin
+    end else if( a < 'h00_4000 && ~eeprom_at_zero_n && ~rw && ~boot ) begin
         // no eeprom at 0 anymore
         eeprom_at_zero_n <= 1'b1;
     end
@@ -103,7 +103,7 @@ always @(posedge clk16)
 begin
     state <= next_state;
     dtack_counter <= next_dtack_counter;
-    if( as_n == 1'b1 ) begin
+    if( ~reset_n || as_n ) begin
         state <= 'd0;
     end
 end
