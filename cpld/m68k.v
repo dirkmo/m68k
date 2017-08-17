@@ -21,6 +21,12 @@ module m68kdecoder(
     output reg [3:0] cs
 );
 
+localparam
+    DEV_NONE = 0,
+    DEV_EEPROM = 1,
+    DEV_RAM = 2,
+    DEV_OTHER = 3;
+
 wire [23:0] a = { addr[23:13], 13'd0 };
 wire ds_n = uds_n & lds_n;
 
@@ -44,12 +50,6 @@ assign ram_ce_n = (cs == DEV_RAM) ? uds_n & lds_n : 1'b1;
 
 reg eeprom_at_zero_n; // 0: eeprom starts at address 0, 1: RAM at address 0.
 
-localparam
-    DEV_NONE = 0,
-    DEV_EEPROM = 1,
-    DEV_RAM = 2,
-    DEV_OTHER = 3;
-
 always @(*) begin
     cs = DEV_NONE;
     if( ~as_n ) begin
@@ -70,7 +70,7 @@ always @(posedge clk16)
 begin
     if( ~reset_n ) begin
         // eeprom at address 0
-        eeprom_at_zero_n = 1'b0;
+        eeprom_at_zero_n <= 1'b0;
     end else if( a < 'h00_4000 && ~eeprom_at_zero_n && ~rw && ~boot ) begin
         // no eeprom at 0 anymore
         eeprom_at_zero_n <= 1'b1;
