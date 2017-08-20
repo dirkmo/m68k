@@ -374,19 +374,19 @@ Text Label 10850 3350 0    60   ~ 0
 A20
 Text Label 10850 3450 0    60   ~ 0
 A21
-Text Label 10850 1950 0    60   ~ 0
+Text Label 10850 4050 0    60   ~ 0
 ~BERR
 Text Label 10850 1450 0    60   ~ 0
 R/~W
-Text Label 10850 3550 0    60   ~ 0
+Text Label 10850 3950 0    60   ~ 0
 A22
-Text Label 10850 3650 0    60   ~ 0
+Text Label 10850 3850 0    60   ~ 0
 A23
 Text Label 4700 3400 2    60   ~ 0
 R/~W
 Text Label 10850 1550 0    60   ~ 0
 ~OE
-Text Label 10850 2050 0    60   ~ 0
+Text Label 10850 3750 0    60   ~ 0
 ~RAM_CE
 Text Label 10850 1750 0    60   ~ 0
 ~LDS
@@ -778,9 +778,9 @@ Text Label 8450 3700 0    60   ~ 0
 ~OE
 Text Label 8450 3900 0    60   ~ 0
 ~EEPROM_UDS
-Text Label 10850 2150 0    60   ~ 0
+Text Label 10850 3550 0    60   ~ 0
 ~EEPROM_LDS
-Text Label 10850 2250 0    60   ~ 0
+Text Label 10850 3650 0    60   ~ 0
 ~EEPROM_UDS
 Text Label 10850 1650 0    60   ~ 0
 ~AS
@@ -1344,37 +1344,37 @@ Text Label 10850 2550 0    60   ~ 0
 DTACK_TRIG
 Text Notes 12650 1350 2    60   ~ 0
 Längeres DTACK für eeprom.
-Text Label 7850 8750 0    60   ~ 0
-D0
-Text Label 7350 8850 2    60   ~ 0
-D1
-Text Label 7850 8850 0    60   ~ 0
-D2
-Text Label 7350 8950 2    60   ~ 0
-D3
-Text Label 7850 8950 0    60   ~ 0
-D4
-Text Label 7350 9050 2    60   ~ 0
-D5
-Text Label 7850 9050 0    60   ~ 0
-D6
-Text Label 7350 9150 2    60   ~ 0
-D7
-Text Label 7850 9150 0    60   ~ 0
-D8
-Text Label 7350 9250 2    60   ~ 0
-D9
-Text Label 7850 9250 0    60   ~ 0
-D10
-Text Label 7350 9350 2    60   ~ 0
-D11
-Text Label 7850 9350 0    60   ~ 0
-D12
-Text Label 7350 9450 2    60   ~ 0
-D13
-Text Label 7850 9450 0    60   ~ 0
-D14
 Text Label 7350 9550 2    60   ~ 0
+D0
+Text Label 7850 9450 0    60   ~ 0
+D1
+Text Label 7350 9450 2    60   ~ 0
+D2
+Text Label 7850 9350 0    60   ~ 0
+D3
+Text Label 7350 9350 2    60   ~ 0
+D4
+Text Label 7850 9250 0    60   ~ 0
+D5
+Text Label 7350 9250 2    60   ~ 0
+D6
+Text Label 7850 9150 0    60   ~ 0
+D7
+Text Label 7350 9150 2    60   ~ 0
+D8
+Text Label 7850 9050 0    60   ~ 0
+D9
+Text Label 7350 9050 2    60   ~ 0
+D10
+Text Label 7850 8950 0    60   ~ 0
+D11
+Text Label 7350 8950 2    60   ~ 0
+D12
+Text Label 7850 8850 0    60   ~ 0
+D13
+Text Label 7350 8850 2    60   ~ 0
+D14
+Text Label 7850 8750 0    60   ~ 0
 D15
 Text Label 7850 9550 0    60   ~ 0
 ~DTACK
@@ -1761,13 +1761,13 @@ F 3 "" H 10300 2250 60  0001 C CNN
 	1    10350 2650
 	1    0    0    -1  
 $EndComp
-Text Label 10850 3750 0    60   ~ 0
+Text Label 10850 1950 0    60   ~ 0
 CS0
-Text Label 10850 3850 0    60   ~ 0
+Text Label 10850 2050 0    60   ~ 0
 CS1
-Text Label 10850 3950 0    60   ~ 0
+Text Label 10850 2150 0    60   ~ 0
 CS2
-Text Label 10850 4050 0    60   ~ 0
+Text Label 10850 2250 0    60   ~ 0
 CS3
 Text Label 7350 10150 2    60   ~ 0
 CS0
@@ -1794,264 +1794,6 @@ F 3 "" H 12300 3050 50  0001 C CNN
 $EndComp
 Text Label 12500 2850 2    60   ~ 0
 R/~W
-Text Label 8800 7450 2    60   ~ 0
-GND
-Text Label 9300 7450 0    60   ~ 0
-+5V
-Text Label 8800 7550 2    60   ~ 0
-GND
-Text Label 9300 7550 0    60   ~ 0
-+3V3
-Text Label 8800 7650 2    60   ~ 0
-A1
-Text Label 9300 7650 0    60   ~ 0
-A2
-Text Label 8800 7750 2    60   ~ 0
-A3
-Text Label 9300 7750 0    60   ~ 0
-A4
-Text Label 8800 7850 2    60   ~ 0
-A5
-Text Label 9300 7850 0    60   ~ 0
-A6
-Text Label 8800 7950 2    60   ~ 0
-A7
-Text Label 9300 7950 0    60   ~ 0
-A8
-Text Label 8800 8050 2    60   ~ 0
-A9
-Text Label 9300 8050 0    60   ~ 0
-A10
-Text Label 8800 8150 2    60   ~ 0
-A11
-Text Label 9300 8150 0    60   ~ 0
-A12
-Text Label 8800 8250 2    60   ~ 0
-A13
-Text Label 9300 8250 0    60   ~ 0
-A14
-Text Label 8800 8350 2    60   ~ 0
-A15
-Text Label 9300 8350 0    60   ~ 0
-A16
-Text Label 8800 8450 2    60   ~ 0
-A17
-Text Label 9300 8450 0    60   ~ 0
-A18
-Text Label 8800 8550 2    60   ~ 0
-A19
-Text Label 9300 8550 0    60   ~ 0
-A20
-Text Label 8800 8650 2    60   ~ 0
-A21
-Text Label 9300 8650 0    60   ~ 0
-A22
-Text Label 8800 8750 2    60   ~ 0
-A23
-Text Label 9300 8750 0    60   ~ 0
-D0
-Text Label 8800 8850 2    60   ~ 0
-D1
-Text Label 9300 8850 0    60   ~ 0
-D2
-Text Label 8800 8950 2    60   ~ 0
-D3
-Text Label 9300 8950 0    60   ~ 0
-D4
-Text Label 8800 9050 2    60   ~ 0
-D5
-Text Label 9300 9050 0    60   ~ 0
-D6
-Text Label 8800 9150 2    60   ~ 0
-D7
-Text Label 9300 9150 0    60   ~ 0
-D8
-Text Label 8800 9250 2    60   ~ 0
-D9
-Text Label 9300 9250 0    60   ~ 0
-D10
-Text Label 8800 9350 2    60   ~ 0
-D11
-Text Label 9300 9350 0    60   ~ 0
-D12
-Text Label 8800 9450 2    60   ~ 0
-D13
-Text Label 9300 9450 0    60   ~ 0
-D14
-Text Label 8800 9550 2    60   ~ 0
-D15
-Text Label 9300 9550 0    60   ~ 0
-~DTACK
-Text Label 8800 9650 2    60   ~ 0
-R/~W
-Text Label 8800 9750 2    60   ~ 0
-~UDS
-Text Label 9300 9650 0    60   ~ 0
-~LDS
-Text Label 9300 9750 0    60   ~ 0
-~BR
-Text Label 8800 9850 2    60   ~ 0
-~BG
-Text Label 9300 9850 0    60   ~ 0
-~AVEC
-Text Label 8800 9950 2    60   ~ 0
-~IPL0
-Text Label 9300 9950 0    60   ~ 0
-~IPL1
-Text Label 8800 10050 2    60   ~ 0
-~IPL2
-Text Label 9300 10050 0    60   ~ 0
-BOOT
-$Comp
-L CONN_02X30 J6
-U 1 1 5992F935
-P 9050 8900
-F 0 "J6" H 9050 10450 50  0000 C CNN
-F 1 "CONN_02X30" V 9050 8900 50  0000 C CNN
-F 2 "Connectors:IDC_Header_Straight_60pins" H 9050 8400 50  0001 C CNN
-F 3 "" H 9050 8400 50  0001 C CNN
-	1    9050 8900
-	1    0    0    -1  
-$EndComp
-NoConn ~ 8800 10350
-NoConn ~ 9300 10350
-Text Label 8800 10150 2    60   ~ 0
-CS0
-Text Label 8800 10250 2    60   ~ 0
-CS2
-Text Label 9300 10150 0    60   ~ 0
-CS1
-Text Label 9300 10250 0    60   ~ 0
-CS3
-Text Label 10150 7450 2    60   ~ 0
-GND
-Text Label 10650 7450 0    60   ~ 0
-+5V
-Text Label 10150 7550 2    60   ~ 0
-GND
-Text Label 10650 7550 0    60   ~ 0
-+3V3
-Text Label 10150 7650 2    60   ~ 0
-A1
-Text Label 10650 7650 0    60   ~ 0
-A2
-Text Label 10150 7750 2    60   ~ 0
-A3
-Text Label 10650 7750 0    60   ~ 0
-A4
-Text Label 10150 7850 2    60   ~ 0
-A5
-Text Label 10650 7850 0    60   ~ 0
-A6
-Text Label 10150 7950 2    60   ~ 0
-A7
-Text Label 10650 7950 0    60   ~ 0
-A8
-Text Label 10150 8050 2    60   ~ 0
-A9
-Text Label 10650 8050 0    60   ~ 0
-A10
-Text Label 10150 8150 2    60   ~ 0
-A11
-Text Label 10650 8150 0    60   ~ 0
-A12
-Text Label 10150 8250 2    60   ~ 0
-A13
-Text Label 10650 8250 0    60   ~ 0
-A14
-Text Label 10150 8350 2    60   ~ 0
-A15
-Text Label 10650 8350 0    60   ~ 0
-A16
-Text Label 10150 8450 2    60   ~ 0
-A17
-Text Label 10650 8450 0    60   ~ 0
-A18
-Text Label 10150 8550 2    60   ~ 0
-A19
-Text Label 10650 8550 0    60   ~ 0
-A20
-Text Label 10150 8650 2    60   ~ 0
-A21
-Text Label 10650 8650 0    60   ~ 0
-A22
-Text Label 10150 8750 2    60   ~ 0
-A23
-Text Label 10650 8750 0    60   ~ 0
-D0
-Text Label 10150 8850 2    60   ~ 0
-D1
-Text Label 10650 8850 0    60   ~ 0
-D2
-Text Label 10150 8950 2    60   ~ 0
-D3
-Text Label 10650 8950 0    60   ~ 0
-D4
-Text Label 10150 9050 2    60   ~ 0
-D5
-Text Label 10650 9050 0    60   ~ 0
-D6
-Text Label 10150 9150 2    60   ~ 0
-D7
-Text Label 10650 9150 0    60   ~ 0
-D8
-Text Label 10150 9250 2    60   ~ 0
-D9
-Text Label 10650 9250 0    60   ~ 0
-D10
-Text Label 10150 9350 2    60   ~ 0
-D11
-Text Label 10650 9350 0    60   ~ 0
-D12
-Text Label 10150 9450 2    60   ~ 0
-D13
-Text Label 10650 9450 0    60   ~ 0
-D14
-Text Label 10150 9550 2    60   ~ 0
-D15
-Text Label 10650 9550 0    60   ~ 0
-~DTACK
-Text Label 10150 9650 2    60   ~ 0
-R/~W
-Text Label 10150 9750 2    60   ~ 0
-~UDS
-Text Label 10650 9650 0    60   ~ 0
-~LDS
-Text Label 10650 9750 0    60   ~ 0
-~BR
-Text Label 10150 9850 2    60   ~ 0
-~BG
-Text Label 10650 9850 0    60   ~ 0
-~AVEC
-Text Label 10150 9950 2    60   ~ 0
-~IPL0
-Text Label 10650 9950 0    60   ~ 0
-~IPL1
-Text Label 10150 10050 2    60   ~ 0
-~IPL2
-Text Label 10650 10050 0    60   ~ 0
-BOOT
-$Comp
-L CONN_02X30 J8
-U 1 1 5992FABC
-P 10400 8900
-F 0 "J8" H 10400 10450 50  0000 C CNN
-F 1 "CONN_02X30" V 10400 8900 50  0000 C CNN
-F 2 "Connectors:IDC_Header_Straight_60pins" H 10400 8400 50  0001 C CNN
-F 3 "" H 10400 8400 50  0001 C CNN
-	1    10400 8900
-	1    0    0    -1  
-$EndComp
-NoConn ~ 10150 10350
-NoConn ~ 10650 10350
-Text Label 10150 10150 2    60   ~ 0
-CS0
-Text Label 10150 10250 2    60   ~ 0
-CS2
-Text Label 10650 10150 0    60   ~ 0
-CS1
-Text Label 10650 10250 0    60   ~ 0
-CS3
 $Comp
 L R_Small R2
 U 1 1 599348E1
@@ -2078,4 +1820,262 @@ F 3 "" H 9550 1700 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	9600 1850 9750 1850
+Text Label 8500 7450 2    60   ~ 0
+GND
+Text Label 9000 7450 0    60   ~ 0
++5V
+Text Label 8500 7550 2    60   ~ 0
+GND
+Text Label 9000 7550 0    60   ~ 0
++3V3
+Text Label 8500 7650 2    60   ~ 0
+A1
+Text Label 9000 7650 0    60   ~ 0
+A2
+Text Label 8500 7750 2    60   ~ 0
+A3
+Text Label 9000 7750 0    60   ~ 0
+A4
+Text Label 8500 7850 2    60   ~ 0
+A5
+Text Label 9000 7850 0    60   ~ 0
+A6
+Text Label 8500 7950 2    60   ~ 0
+A7
+Text Label 9000 7950 0    60   ~ 0
+A8
+Text Label 8500 8050 2    60   ~ 0
+A9
+Text Label 9000 8050 0    60   ~ 0
+A10
+Text Label 8500 8150 2    60   ~ 0
+A11
+Text Label 9000 8150 0    60   ~ 0
+A12
+Text Label 8500 8250 2    60   ~ 0
+A13
+Text Label 9000 8250 0    60   ~ 0
+A14
+Text Label 8500 8350 2    60   ~ 0
+A15
+Text Label 9000 8350 0    60   ~ 0
+A16
+Text Label 8500 8450 2    60   ~ 0
+A17
+Text Label 9000 8450 0    60   ~ 0
+A18
+Text Label 8500 8550 2    60   ~ 0
+A19
+Text Label 9000 8550 0    60   ~ 0
+A20
+Text Label 8500 8650 2    60   ~ 0
+A21
+Text Label 9000 8650 0    60   ~ 0
+A22
+Text Label 8500 8750 2    60   ~ 0
+A23
+Text Label 8500 9550 2    60   ~ 0
+D0
+Text Label 9000 9450 0    60   ~ 0
+D1
+Text Label 8500 9450 2    60   ~ 0
+D2
+Text Label 9000 9350 0    60   ~ 0
+D3
+Text Label 8500 9350 2    60   ~ 0
+D4
+Text Label 9000 9250 0    60   ~ 0
+D5
+Text Label 8500 9250 2    60   ~ 0
+D6
+Text Label 9000 9150 0    60   ~ 0
+D7
+Text Label 8500 9150 2    60   ~ 0
+D8
+Text Label 9000 9050 0    60   ~ 0
+D9
+Text Label 8500 9050 2    60   ~ 0
+D10
+Text Label 9000 8950 0    60   ~ 0
+D11
+Text Label 8500 8950 2    60   ~ 0
+D12
+Text Label 9000 8850 0    60   ~ 0
+D13
+Text Label 8500 8850 2    60   ~ 0
+D14
+Text Label 9000 8750 0    60   ~ 0
+D15
+Text Label 9000 9550 0    60   ~ 0
+~DTACK
+Text Label 8500 9650 2    60   ~ 0
+R/~W
+Text Label 8500 9750 2    60   ~ 0
+~UDS
+Text Label 9000 9650 0    60   ~ 0
+~LDS
+Text Label 9000 9750 0    60   ~ 0
+~BR
+Text Label 8500 9850 2    60   ~ 0
+~BG
+Text Label 9000 9850 0    60   ~ 0
+~AVEC
+Text Label 8500 9950 2    60   ~ 0
+~IPL0
+Text Label 9000 9950 0    60   ~ 0
+~IPL1
+Text Label 8500 10050 2    60   ~ 0
+~IPL2
+Text Label 9000 10050 0    60   ~ 0
+BOOT
+$Comp
+L CONN_02X30 J6
+U 1 1 5997FD38
+P 8750 8900
+F 0 "J6" H 8750 10450 50  0000 C CNN
+F 1 "CONN_02X30" V 8750 8900 50  0000 C CNN
+F 2 "Connectors:IDC_Header_Straight_60pins" H 8750 8400 50  0001 C CNN
+F 3 "" H 8750 8400 50  0001 C CNN
+	1    8750 8900
+	1    0    0    -1  
+$EndComp
+NoConn ~ 8500 10350
+NoConn ~ 9000 10350
+Text Label 8500 10150 2    60   ~ 0
+CS0
+Text Label 8500 10250 2    60   ~ 0
+CS2
+Text Label 9000 10150 0    60   ~ 0
+CS1
+Text Label 9000 10250 0    60   ~ 0
+CS3
+Text Label 9650 7450 2    60   ~ 0
+GND
+Text Label 10150 7450 0    60   ~ 0
++5V
+Text Label 9650 7550 2    60   ~ 0
+GND
+Text Label 10150 7550 0    60   ~ 0
++3V3
+Text Label 9650 7650 2    60   ~ 0
+A1
+Text Label 10150 7650 0    60   ~ 0
+A2
+Text Label 9650 7750 2    60   ~ 0
+A3
+Text Label 10150 7750 0    60   ~ 0
+A4
+Text Label 9650 7850 2    60   ~ 0
+A5
+Text Label 10150 7850 0    60   ~ 0
+A6
+Text Label 9650 7950 2    60   ~ 0
+A7
+Text Label 10150 7950 0    60   ~ 0
+A8
+Text Label 9650 8050 2    60   ~ 0
+A9
+Text Label 10150 8050 0    60   ~ 0
+A10
+Text Label 9650 8150 2    60   ~ 0
+A11
+Text Label 10150 8150 0    60   ~ 0
+A12
+Text Label 9650 8250 2    60   ~ 0
+A13
+Text Label 10150 8250 0    60   ~ 0
+A14
+Text Label 9650 8350 2    60   ~ 0
+A15
+Text Label 10150 8350 0    60   ~ 0
+A16
+Text Label 9650 8450 2    60   ~ 0
+A17
+Text Label 10150 8450 0    60   ~ 0
+A18
+Text Label 9650 8550 2    60   ~ 0
+A19
+Text Label 10150 8550 0    60   ~ 0
+A20
+Text Label 9650 8650 2    60   ~ 0
+A21
+Text Label 10150 8650 0    60   ~ 0
+A22
+Text Label 9650 8750 2    60   ~ 0
+A23
+Text Label 9650 9550 2    60   ~ 0
+D0
+Text Label 10150 9450 0    60   ~ 0
+D1
+Text Label 9650 9450 2    60   ~ 0
+D2
+Text Label 10150 9350 0    60   ~ 0
+D3
+Text Label 9650 9350 2    60   ~ 0
+D4
+Text Label 10150 9250 0    60   ~ 0
+D5
+Text Label 9650 9250 2    60   ~ 0
+D6
+Text Label 10150 9150 0    60   ~ 0
+D7
+Text Label 9650 9150 2    60   ~ 0
+D8
+Text Label 10150 9050 0    60   ~ 0
+D9
+Text Label 9650 9050 2    60   ~ 0
+D10
+Text Label 10150 8950 0    60   ~ 0
+D11
+Text Label 9650 8950 2    60   ~ 0
+D12
+Text Label 10150 8850 0    60   ~ 0
+D13
+Text Label 9650 8850 2    60   ~ 0
+D14
+Text Label 10150 8750 0    60   ~ 0
+D15
+Text Label 10150 9550 0    60   ~ 0
+~DTACK
+Text Label 9650 9650 2    60   ~ 0
+R/~W
+Text Label 9650 9750 2    60   ~ 0
+~UDS
+Text Label 10150 9650 0    60   ~ 0
+~LDS
+Text Label 10150 9750 0    60   ~ 0
+~BR
+Text Label 9650 9850 2    60   ~ 0
+~BG
+Text Label 10150 9850 0    60   ~ 0
+~AVEC
+Text Label 9650 9950 2    60   ~ 0
+~IPL0
+Text Label 10150 9950 0    60   ~ 0
+~IPL1
+Text Label 9650 10050 2    60   ~ 0
+~IPL2
+Text Label 10150 10050 0    60   ~ 0
+BOOT
+$Comp
+L CONN_02X30 J8
+U 1 1 5997FDC7
+P 9900 8900
+F 0 "J8" H 9900 10450 50  0000 C CNN
+F 1 "CONN_02X30" V 9900 8900 50  0000 C CNN
+F 2 "Connectors:IDC_Header_Straight_60pins" H 9900 8400 50  0001 C CNN
+F 3 "" H 9900 8400 50  0001 C CNN
+	1    9900 8900
+	1    0    0    -1  
+$EndComp
+NoConn ~ 9650 10350
+NoConn ~ 10150 10350
+Text Label 9650 10150 2    60   ~ 0
+CS0
+Text Label 9650 10250 2    60   ~ 0
+CS2
+Text Label 10150 10150 0    60   ~ 0
+CS1
+Text Label 10150 10250 0    60   ~ 0
+CS3
 $EndSCHEMATC
