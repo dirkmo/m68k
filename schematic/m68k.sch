@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:m68k-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -31,7 +32,7 @@ LIBS:valves
 LIBS:custom
 LIBS:switches
 LIBS:m68k-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -395,7 +396,7 @@ Text Label 10850 1850 0    60   ~ 0
 Text Label 9750 1550 2    60   ~ 0
 CLK_50MHz
 $Comp
-L CONN_01X06 J3
+L Conn_01X06 J3
 U 1 1 59881DD2
 P 4850 6750
 F 0 "J3" H 4850 7100 50  0000 C CNN
@@ -429,7 +430,7 @@ F 3 "" H 2250 5850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_01X03 J2
+L Conn_01X03 J2
 U 1 1 59883D86
 P 6150 6850
 F 0 "J2" H 6150 7050 50  0000 C CNN
@@ -1012,7 +1013,7 @@ F 3 "" H 4900 4800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_01X04 J1
+L Conn_01X04 J1
 U 1 1 5989E226
 P 3850 6850
 F 0 "J1" H 3850 7100 50  0000 C CNN
@@ -1396,8 +1397,6 @@ Text Label 7850 9950 0    60   ~ 0
 ~IPL1
 Text Label 7350 10050 2    60   ~ 0
 ~IPL2
-Text Label 7850 10050 0    60   ~ 0
-BOOT
 $Comp
 L AS6C8016 U2
 U 1 1 598B5339
@@ -1651,7 +1650,7 @@ Wire Wire Line
 Connection ~ 2250 5800
 NoConn ~ 3250 1400
 $Comp
-L CONN_01X03 J5
+L Conn_01X03 J5
 U 1 1 598BE077
 P 2750 6800
 F 0 "J5" H 2750 7000 50  0000 C CNN
@@ -1671,7 +1670,7 @@ Wire Wire Line
 	2000 6800 1950 6800
 Connection ~ 1950 6800
 $Comp
-L CONN_02X30 J4
+L Conn_02X30 J4
 U 1 1 598BF124
 P 7600 8900
 F 0 "J4" H 7600 10450 50  0000 C CNN
@@ -1782,7 +1781,7 @@ Text Label 12500 2650 2    60   ~ 0
 Text Label 12500 2750 2    60   ~ 0
 ~HALT
 $Comp
-L CONN_01X03 J9
+L Conn_01X03 J9
 U 1 1 599050EF
 P 12300 3050
 F 0 "J9" H 12300 3250 50  0000 C CNN
@@ -1808,7 +1807,7 @@ $EndComp
 Text Label 9400 1850 2    60   ~ 0
 ~RESET
 $Comp
-L CONN_01X02 J7
+L Conn_01X02 J7
 U 1 1 59934E94
 P 9550 1700
 F 0 "J7" H 9550 1850 50  0000 C CNN
@@ -1926,10 +1925,8 @@ Text Label 9000 9950 0    60   ~ 0
 ~IPL1
 Text Label 8500 10050 2    60   ~ 0
 ~IPL2
-Text Label 9000 10050 0    60   ~ 0
-BOOT
 $Comp
-L CONN_02X30 J6
+L Conn_02X30 J6
 U 1 1 5997FD38
 P 8750 8900
 F 0 "J6" H 8750 10450 50  0000 C CNN
@@ -2055,10 +2052,8 @@ Text Label 10150 9950 0    60   ~ 0
 ~IPL1
 Text Label 9650 10050 2    60   ~ 0
 ~IPL2
-Text Label 10150 10050 0    60   ~ 0
-BOOT
 $Comp
-L CONN_02X30 J8
+L Conn_02X30 J8
 U 1 1 5997FDC7
 P 9900 8900
 F 0 "J8" H 9900 10450 50  0000 C CNN
@@ -2078,4 +2073,7 @@ Text Label 10150 10150 0    60   ~ 0
 CS1
 Text Label 10150 10250 0    60   ~ 0
 CS3
+NoConn ~ 10150 10050
+NoConn ~ 9000 10050
+NoConn ~ 7850 10050
 $EndSCHEMATC
