@@ -61,7 +61,11 @@ always @(*) begin
             cs = DEV_EEPROM;
         end else begin
             // no bus error handling atm
-            cs = DEV_OTHER;
+            if( boot ) begin
+                cs = DEV_NONE;
+            end else begin
+                cs = DEV_OTHER;
+            end
         end
     end
 end
