@@ -1,0 +1,9 @@
+{
+	"name": "bootstrap",
+	"authors": [
+		"Dirk Möller"
+	],
+	"description": "m68k bootstrapping application",
+	"copyright": "Copyright © 2017, Dirk Möller",
+	"license": "dont care"
+}
