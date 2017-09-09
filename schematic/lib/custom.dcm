@@ -34,9 +34,18 @@ D Parallax Propeller P8X32A
 K P8X32A Parallax Propeller Microcontroller
 $ENDCMP
 #
+$CMP PS2_female
+D PS/2 female connector
+K PS2 PS/2
+$ENDCMP
+#
 $CMP SST26VF
 D Generic serial flash device
 K flash, serial, spi
+$ENDCMP
+#
+$CMP WIZ820IO
+D Network module
 $ENDCMP
 #
 $CMP XC9572XL-VQ44
