@@ -14,6 +14,11 @@ D parallel EEPROM, 8k x 8bit, 200ns, 2.7 V - 3.6 V, SOIC, Mouser: 556-AT28BV64B-
 K AT28BV64B
 $ENDCMP
 #
+$CMP FT230X
+D FT230X USB to UART
+K USB UART
+$ENDCMP
+#
 $CMP FT232R
 D FT232R USB UART IC
 K UART USB
@@ -22,6 +27,16 @@ $ENDCMP
 $CMP M68SEC000
 D Microprocesseur bus 16 bits
 K MPRO
+$ENDCMP
+#
+$CMP P8X32A
+D Parallax Propeller P8X32A
+K P8X32A Parallax Propeller Microcontroller
+$ENDCMP
+#
+$CMP SST26VF
+D Generic serial flash device
+K flash, serial, spi
 $ENDCMP
 #
 $CMP XC9572XL-VQ44
