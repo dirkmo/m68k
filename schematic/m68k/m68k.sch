@@ -31,7 +31,8 @@ LIBS:contrib
 LIBS:valves
 LIBS:custom
 LIBS:switches
-EELAYER 25 0
+LIBS:m68k-cache
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -2071,4 +2072,62 @@ Connection ~ 3400 6850
 Connection ~ 3900 6850
 Connection ~ 3400 6750
 Connection ~ 3900 6750
+Text Notes 3650 9750 0    60   ~ 0
+IACK fehlt.\nIACK = {FC[2:0], A[19:16]} == 7'b111_1111
+Text Notes 7950 10050 0    60   ~ 0
+IACK
+Text Notes 9100 10050 0    60   ~ 0
+IACK
+Text Notes 10250 10050 0    60   ~ 0
+IACK
+Text Notes 8950 1700 0    60   ~ 0
+IACK_ADDR
+$Comp
+L 74LS21 U?
+U 1 1 59BA6149
+P 4600 9150
+F 0 "U?" H 4600 9525 50  0000 C CNN
+F 1 "74HC21" H 4600 9434 50  0000 C CNN
+F 2 "" H 4600 9150 50  0001 C CNN
+F 3 "" H 4600 9150 50  0001 C CNN
+	1    4600 9150
+	1    0    0    -1  
+$EndComp
+Text Label 5200 9150 0    60   ~ 0
+IACK
+Text Label 4000 9000 2    60   ~ 0
+FC0
+Text Label 4000 9100 2    60   ~ 0
+FC1
+Text Label 4000 9200 2    60   ~ 0
+FC2
+Text Label 4000 9300 2    60   ~ 0
+IACK_ADDR
+$Comp
+L 74LS21 U?
+U 2 1 59BA7BD3
+P 4450 10350
+F 0 "U?" H 4450 10725 50  0000 C CNN
+F 1 "74HC21" H 4450 10634 50  0000 C CNN
+F 2 "" H 4450 10350 50  0001 C CNN
+F 3 "" H 4450 10350 50  0001 C CNN
+	2    4450 10350
+	1    0    0    -1  
+$EndComp
+Text Label 3850 10200 2    60   ~ 0
+GND
+NoConn ~ 3850 10300
+NoConn ~ 3850 10400
+NoConn ~ 3850 10500
+NoConn ~ 5050 10350
+Text Notes 5150 9850 2    60   ~ 0
+Müsste auch ohne FCx gehen?!
+Wire Notes Line
+	3450 8450 3450 10650
+Wire Notes Line
+	3450 10650 5950 10650
+Wire Notes Line
+	5950 10650 5950 8450
+Wire Notes Line
+	5950 8450 3450 8450
 $EndSCHEMATC

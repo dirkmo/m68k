@@ -30,3 +30,4 @@ NET "cs<0>"          LOC =  "S:PIN12";
 NET "cs<1>"          LOC =  "S:PIN13";
 NET "cs<3>"          LOC =  "S:PIN14";
 NET "cs<2>"          LOC =  "S:PIN16";
+NET "iack_addr"      LOC =  "S:PIN36";

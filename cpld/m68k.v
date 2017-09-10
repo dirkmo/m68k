@@ -18,14 +18,17 @@ module m68kdecoder(
     input boot,
     input dtack_trig,
     input [23:13] addr,
-    output reg [3:0] cs
+    output reg [3:0] cs,
+    output wire iack_addr
 );
 
 localparam
-    DEV_NONE = 0,
-    DEV_EEPROM = 1,
-    DEV_RAM = 2,
-    DEV_OTHER = 3;
+    DEV_NONE    = 0,
+    DEV_EEPROM  = 1,
+    DEV_RAM     = 2,
+    DEV_VT      = 3,
+    DEV_PIC     = 4,
+    DEV_OTHER   = 5;
 
 wire [23:0] a = { addr[23:13], 13'd0 };
 wire ds_n = uds_n & lds_n;
@@ -36,6 +39,9 @@ assign oe_n = boot ? 1'b1 : ~rw;
 assign eeprom_lds_n = (cs == DEV_EEPROM) ? lds_n : 1'b1;
 assign eeprom_uds_n = (cs == DEV_EEPROM) ? uds_n : 1'b1;
 assign ram_ce_n = (cs == DEV_RAM) ? uds_n & lds_n : 1'b1;
+
+// for iack generation:
+assign iack_addr = (addr[19:16] == 4'b1111);
 
 //---------------------------------------------------------------
 // address decoding
@@ -59,6 +65,10 @@ always @(*) begin
             cs = DEV_RAM;
         end else if( a < 'h10_4000 ) begin
             cs = DEV_EEPROM;
+        end else if( a < 'h11_0000 ) begin
+            cs = DEV_VT;
+        end else if( a < 'h12_0000 ) begin
+            cs = DEV_PIC;
         end else begin
             // no bus error handling atm
             if( boot ) begin
