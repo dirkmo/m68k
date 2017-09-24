@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python2
+# -*- coding: utf-8 -*-
 
 import serial
 import sys
@@ -25,12 +26,17 @@ class BusPirate(object):
 
     I2C_START = 0x02
     I2C_STOP  = 0x03
-    I2C_SPEED = 0x33 # 400 kHz
+    I2C_ACK   = 0x06
+    I2C_NACK  = 0x07
+    I2C_WRITE_READ = 0x08
+    I2C_SPEED = 0x63 # 400 kHz
+    I2C_BULK  = 0x10
 
     BPMODE_UNKNOWN = 0
-    BPMODE_BINARY = 1
-    BPMODE_SPI = 2
-    BPMODE_I2C = 3
+    BPMODE_BINARY  = 1
+    BPMODE_SPI     = 2
+    BPMODE_I2C     = 3
+
 
     def enter_binary_mode(self):
         count = 0
@@ -62,8 +68,8 @@ class BusPirate(object):
             print "Failed to enter SPI mode"
             return False
         self._mode = self.BPMODE_SPI
-        self.cmd( self.SPI_CFG )
-        self.cmd( self.SPI_PWRON )
+        self.cmd(self.SPI_CFG)
+        self.cmd(self.SPI_PWRON)
         return True
 
 
@@ -73,15 +79,11 @@ class BusPirate(object):
         self.ser.write('\x02')
         answer = self.ser.read(4)
         if answer != 'I2C1':
-            print "Failed to enter SPI mode"
+            print "Failed to enter I2C mode"
             return False
         self._mode = self.BPMODE_I2C
-        self.cmd( self.I2C_SPEED )
+        self.cmd(self.I2C_SPEED)
         return True
-
-
-    def set_i2c_address(self, addr):
-        self._i2caddr = addr
 
 
     def leave_binary_mode(self):
@@ -109,7 +111,7 @@ class BusPirate(object):
         self.ser.flush()
         self.ser.write(chr(cmd))
         ret = self.ser.read(1)
-        #print "Send:", format(cmd, '02X'), "rec:", format(ord(ret[0]), '02X')
+        print "Send:", format(cmd, '02X'), "rec:", format(ord(ret[0]), '02X')
         if ret != '\x01':
             print "ERROR command", repr(cmd), repr(ret)
         return ret == '\x01'
@@ -146,8 +148,60 @@ class BusPirate(object):
         return rxb
 
 
-    def i2c_transfer(self, txb):
-        print "bla"
+    def i2c_send(self, i2caddr, regaddr, regaddrlen, txb):
+        # send txb bytearray via bus pirate binary spi mode
+        if self._mode != self.BPMODE_I2C:
+            if not self.enter_binary_mode() or not self.enter_i2c_mode():
+                raise Exception('Cannot enter i2c mode')
+        # i2c start
+        print "===Start"
+        self.cmd(self.I2C_START)
+        print "===Adressen"
+        # i2c address, register addr, in one bulk transfer
+        self.cmd(self.I2C_BULK | regaddrlen)
+        self.ser.write(chr(i2caddr))
+        ret = self.ser.read(1)
+        print "Send:", format(i2caddr, '02X'), "rec:", format(ord(ret[0]), '02X')
+        while regaddrlen > 0:
+            b = chr(regaddr & 0xFF) 
+            self.ser.write(b)
+            ret = self.ser.read(1)
+            print "Send:", format(ord(b), '02X'), "rec:", format(ord(ret[0]), '02X')
+            regaddr = regaddr >> 8
+            regaddrlen -= 1
+        print "===Daten"
+        if( len(txb) > 0 ):
+            self.cmd(self.I2C_BULK | (len(txb)-1))
+            # data
+            for b in txb:
+                self.ser.write(chr(b))
+                ret = self.ser.read(1)
+                print "Send:", format(b, '02X'), "rec:", format(ord(ret[0]), '02X')
+        # i2c stop
+        print "===Stop"
+        self.cmd(self.I2C_STOP)
+
+
+    def i2c_receive(self, i2caddr, regaddr, regaddrlen, rxb):
+        # send txb bytearray via bus pirate binary spi mode
+        if self._mode != self.BPMODE_I2C:
+            if not self.enter_binary_mode() or not self.enter_i2c_mode():
+                raise Exception('Cannot enter i2c mode')
+        # i2c write then read
+        self.ser.write(self.I2C_WRITE_READ)
+        wbc = 1 + regaddrlen
+        # num of bytes to write HI,LO
+        # num of bytes to read, HI, LO
+        # i2caddr
+        self.ser.write(bytearray([0, wbc, 0, len(rxb), i2caddr]))
+        # reg addr
+        while regaddrlen > 0:
+            self.ser.write(regaddr >> (8*regaddrlen-8))
+            regaddrlen -= 1
+        ret = self.ser.read(1)
+        print ret
+        if ret == 1:
+            self.ser.read(len(rxb))
 
 
     def __init__(self, portname):
@@ -158,7 +212,9 @@ class BusPirate(object):
 
 
 def main():
-    bp = BusPirate( "/dev/ttyUSB0" )
+    bp = BusPirate("/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AL03NOWB-if00-port0")
+    bp.i2c_send(0x42, 0x09, 1, bytearray([0x0,0x72]))
+    bp.i2c_receive(0x42, 0, 1, bytearray(11))
 
 
 if __name__ == "__main__":
