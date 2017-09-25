@@ -3,6 +3,7 @@
 
 import serial
 import sys
+import time
 
 
 # 00000001 – Mode version string (I2C1)
@@ -26,9 +27,9 @@ class BusPirate(object):
 
     I2C_START = 0x02
     I2C_STOP  = 0x03
+    I2C_READ  = 0x04
     I2C_ACK   = 0x06
     I2C_NACK  = 0x07
-    I2C_WRITE_READ = 0x08
     I2C_SPEED = 0x63 # 400 kHz
     I2C_BULK  = 0x10
 
@@ -82,7 +83,7 @@ class BusPirate(object):
             print "Failed to enter I2C mode"
             return False
         self._mode = self.BPMODE_I2C
-        self.cmd(self.I2C_SPEED)
+        #self.cmd(self.I2C_SPEED)
         return True
 
 
@@ -187,21 +188,42 @@ class BusPirate(object):
         if self._mode != self.BPMODE_I2C:
             if not self.enter_binary_mode() or not self.enter_i2c_mode():
                 raise Exception('Cannot enter i2c mode')
-        # i2c write then read
-        self.ser.write(self.I2C_WRITE_READ)
-        wbc = 1 + regaddrlen
-        # num of bytes to write HI,LO
-        # num of bytes to read, HI, LO
-        # i2caddr
-        self.ser.write(bytearray([0, wbc, 0, len(rxb), i2caddr]))
-        # reg addr
-        while regaddrlen > 0:
-            self.ser.write(regaddr >> (8*regaddrlen-8))
-            regaddrlen -= 1
+        # i2c start
+        print "===Start"
+        self.cmd(self.I2C_START)
+        print "===Adressen"
+        # i2c address, register addr, in one bulk transfer
+        self.cmd(self.I2C_BULK | regaddrlen)
+        self.ser.write(chr(i2caddr))
         ret = self.ser.read(1)
-        print ret
-        if ret == 1:
-            self.ser.read(len(rxb))
+        print "Send:", format(i2caddr, '02X'), "rec:", format(ord(ret[0]), '02X')
+        while regaddrlen > 0:
+            b = chr(regaddr & 0xFF) 
+            self.ser.write(b)
+            ret = self.ser.read(1)
+            print "Send:", format(ord(b), '02X'), "rec:", format(ord(ret[0]), '02X')
+            regaddr = regaddr >> 8
+            regaddrlen -= 1
+        
+        # i2c start
+        print "===Restart"
+        self.cmd(self.I2C_START)
+        print "===Adressen"
+        # i2c address
+        self.cmd(self.I2C_BULK)
+        self.ser.write(chr(i2caddr | 1))
+        ret = self.ser.read(1)
+        print "Send:", format(i2caddr|1, '02X'), "rec:", format(ord(ret[0]), '02X')
+        
+        print "===Daten"
+        
+        for i in range(0, len(rxb)):
+            self.ser.write(chr(self.I2C_READ)
+            rxb[i] = self.ser.read(1)
+            if i < len(rxb)-1:
+                self.cmd(self.I2C_ACK)
+            else:
+                self.cmd(self.I2C_NACK)
 
 
     def __init__(self, portname):
@@ -211,10 +233,27 @@ class BusPirate(object):
             raise Exception( 'Unable to enter binary mode' )
 
 
+    def test(self):
+        if self._mode != self.BPMODE_I2C:
+            if not self.enter_binary_mode() or not self.enter_i2c_mode():
+                raise Exception('Cannot enter i2c mode')
+ 
+        buf = bytearray([0x02, 0x11, 0x42, 0x00, 0x02, 0x10, 0x43,
+        0x04, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x06,
+        0x04, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x06,
+        0x04, 0x07, 0x03])
+        for b in buf:
+            self.ser.write(b)
+            self.ser.read(1)
+            #time.sleep(0.01)
+            print b
+
 def main():
     bp = BusPirate("/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AL03NOWB-if00-port0")
-    bp.i2c_send(0x42, 0x09, 1, bytearray([0x0,0x72]))
-    bp.i2c_receive(0x42, 0, 1, bytearray(11))
+    #bp.i2c_send(0x42, 0x09, 1, bytearray([0x13,0x72]))
+    #print "\nLesetest"
+    #bp.i2c_receive(0x42, 0x9, 1, bytearray(2))
+    bp.test()
 
 
 if __name__ == "__main__":
