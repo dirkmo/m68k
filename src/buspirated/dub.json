@@ -1,0 +1,19 @@
+{
+	"name": "buspirated",
+	"authors": [
+		"Dirk Möller"
+	],
+	"description": "bus pirate library",
+	"sourceFiles": ["cserial/serial.o"],
+
+	"configurations": [
+		{
+			"name": "library",
+			"targetTypef": "library"
+		},
+		{
+			"name": "application",
+			"targetType": "executable"
+		},
+	],
+}
