@@ -5,6 +5,7 @@
 #include <errno.h>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "serial.h"
 
@@ -91,16 +92,32 @@ int serial_writebyte( int fd, char b ) {
     return write(fd, &b, 1);
 }
 
-/*
-int main() {
-    int fd = serial_open( "/dev/ttyUSB0", B115200);
-    write( fd, "?\r\n", 3);
-    while(1) {
-        char b;
-        if( read(fd, &b, 1) == 1 ) {
-            printf("%c", b);
-        }
+#ifdef __EXEC__
+int main(int argc, char **argv) {
+    if ( argc < 3 ) {
+        printf("serial [port] [data]\n");
+        return 1;
     }
+    int fd = serial_open( argv[1], B115200);
+    if( fd == -1 ) {
+        printf("Cannot open port %s\n", argv[1]);
+        return 2;
+    }
+
+    int i;
+    char data[argc-2];
+    for ( i = 2; i < argc; i++) {
+        data[i-2] = strtoul(argv[i], NULL, 16);
+    }
+
+    write( fd, data, argc-2 );
+    usleep(10*1000);
+
+    char b;
+    while(read(fd, &b, 1) > 0) {
+        printf("%02X", b);
+    }
+    printf("\n");
     return 0;
 }
-*/
+#endif
