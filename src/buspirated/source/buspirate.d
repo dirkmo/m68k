@@ -18,6 +18,21 @@ class BusPirate {
         i2c
     }
 
+    enum Commands {
+        i2c_start = 0x02,
+        i2c_stop = 0x03,
+        i2c_read = 0x04,
+        i2c_ack = 0x06,
+        i2c_nack = 0x07,
+        i2c_bulk = 0x10,
+        
+        spi_cs_low = 0x02,
+        spi_cs_high = 0x03,
+        spi_rxtx = 0x10,
+        spi_cfg = 0x8A, // 3,3V, CLK idle low, CLK edge active to idle, sample in middle
+        spi_pwron = 0x49, // enable 3,3V power supply, pullups=0, aux=0, cs=1
+    }
+
     /// constructor
     this() {
         m_ser = new dserial.SerialPort();
@@ -86,13 +101,13 @@ class BusPirate {
     }
 
     /// send command byte and expect 0x01 as answer.
-    bool command( char cmd ) {
+    bool command( char cmd, bool bDebug = false ) {
         //writeln(__FUNCTION__);
         m_ser.flush();
         m_ser.modeBlockWithTimeout(5);
-        m_ser.write( [ cmd ] );
+        m_ser.write( [ cmd ], bDebug );
         char[] cAnswer;
-        const int count = m_ser.read( cAnswer, 0 );
+        const int count = m_ser.read( cAnswer, 1, bDebug );
         if( count < 1 || cAnswer[0] != 1 ) {
             return false;
         }
@@ -126,6 +141,25 @@ class BusPirate {
     bool switchToModeI2C() {
         //writeln(__FUNCTION__);
         return switchToMode( Mode.i2c );
+    }
+
+    bool send_i2c( ubyte i2cAddr, char[] data ) {
+        if( m_mode != Mode.i2c && !switchToModeI2C() ) {
+            return false;
+        }
+        const numBytes = data.length;
+        if( numBytes > 16 ) {
+            return false;
+        }
+        command( Commands.i2c_start, true );
+        char cmd = cast(char)(Commands.i2c_bulk | numBytes);
+        command( cmd, true );
+        char[] dts = [ cast(char)i2cAddr ] ~ data;
+        m_ser.write( dts, true );
+        char[] recData;
+        m_ser.read( recData, cast(int)numBytes+1, true );
+        command( Commands.i2c_stop, true );
+        return true;
     }
     
     protected:
@@ -180,20 +214,7 @@ int main( string[] args ) {
         return 2;
     }
 
-    if ( ! bp.switchToModeBinary() ) {
-        writefln("Cannot switch to binary mode");
-        return 3;
-    }
-
-    if ( ! bp.switchToModeI2C() ) {
-        writefln("Cannot switch to i2c mode");
-        //return 3;
-    }
-
-    if ( ! bp.switchToModeSpi() ) {
-        writefln("Cannot switch to spi mode");
-        //return 3;
-    }
+    bp.send_i2c( 0x42, [ 0x09, 0xF0 ] );
 
     if( ! bp.switchToModeTerminal() ) {
         writefln("Cannot switch to terminal mode");

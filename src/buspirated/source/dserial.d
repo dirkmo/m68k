@@ -22,14 +22,18 @@ class SerialPort {
 	}
 
 	/// write data to serial port
-	void write( char[] data ) {
+	void write( char[] data, bool print = false ) {
+		if(print) writef("write: ");
 		foreach ( d ; data ) {
 			serial_writebyte(fd, d);
+			if(print) writef("0x%02X ", d);
 		}
+		if(print) writeln();
 	}
 
 	/// read data from serial port
-	int read( ref char[] data, int count ) {
+	int read( ref char[] data, int count, bool print = false  ) {
+		if(print) writef("read: ");
 		char b;
 		int reccount = 0;
 		if( count == 0 ) {
@@ -39,11 +43,13 @@ class SerialPort {
 			if( serial_readbyte( fd, &b ) > 0 ) {
 				data ~= b;
 				reccount++;
+				if(print) writef("0x%02X ", b);
 			} else {
 				break;
 			}
 			count--;
 		}
+		if(print) writeln();
 		return reccount;
 	}
 	
