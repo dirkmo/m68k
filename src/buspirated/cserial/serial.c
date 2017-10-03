@@ -6,6 +6,7 @@
 #include <termios.h> /* POSIX terminal control definitions */
 #include <stdint.h>
 #include <sys/ioctl.h>
+#include <stdlib.h>
 
 #include "serial.h"
 
@@ -113,20 +114,32 @@ int serial_bytes_available( int fd ) {
     return bytes_avail;
 }
 
-/*
-int main() {
-    int fd = serial_open( "/dev/ttyUSB1", B115200);
-    serial_timeout(fd, 0, 5);
-    //write( fd, "?\r\n", 3);
-    int i;
-    for(i = 0; i<256; i++) {
-        unsigned char b,c;
-        c=i;
-        write(fd, &c, 1);
-        read(fd, &b, 1);
-        printf("0x%02X 0x%02X\n", i, b);
-        if ( c != b ) printf("ERROR\n");
+#ifdef __EXEC__
+int main(int argc, char **argv) {
+    if ( argc < 3 ) {
+        printf("serial [port] [data]\n");
+        return 1;
     }
+    int fd = serial_open( argv[1], B115200);
+    if( fd == -1 ) {
+        printf("Cannot open port %s\n", argv[1]);
+        return 2;
+    }
+
+    int i;
+    char data[argc-2];
+    for ( i = 2; i < argc; i++) {
+        data[i-2] = strtoul(argv[i], NULL, 16);
+    }
+
+    write( fd, data, argc-2 );
+    usleep(10*1000);
+
+    char b;
+    while(read(fd, &b, 1) > 0) {
+        printf("%02X", b);
+    }
+    printf("\n");
     return 0;
 }
-*/
+#endif
