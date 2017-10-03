@@ -5,10 +5,24 @@
 #include <errno.h>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
 #include <stdint.h>
+#include <sys/ioctl.h>
 
 #include "serial.h"
 
-static int set_interface_attribs(int fd, int speed) {
+static int get_baudrate_value(int baudrate) {
+    int value;
+    switch(baudrate) {
+        case 9600: value = B9600; break;
+        case 19200: value = B19200; break;
+        case 38400: value = B38400; break;
+        case 57600: value = B57600; break;
+        case 115200: value = B115200; break;
+        default: value = B115200; break;
+    }
+    return value;
+}
+
+static int set_interface_attribs(int fd, int baudrate) {
     struct termios tty;
 
     if (tcgetattr(fd, &tty) < 0) {
@@ -16,6 +30,7 @@ static int set_interface_attribs(int fd, int speed) {
         return -1;
     }
 
+    speed_t speed = get_baudrate_value(baudrate);
     cfsetospeed(&tty, (speed_t)speed);
     cfsetispeed(&tty, (speed_t)speed);
 
@@ -66,7 +81,7 @@ int serial_timeout(int fd, int vmin, int vtime) {
 
 int serial_open(const char *port, int baudrate ) {
     printf("Opening port %s\n", port);
-    int fd = open(port, O_RDWR | O_NOCTTY | O_NDELAY);
+    int fd = open(port, O_RDWR | O_NOCTTY /*| O_NDELAY*/);
     if( fd == -1) {
         return -1;
     }
@@ -88,18 +103,29 @@ int serial_readbyte( int fd, char *b ) {
 }
 
 int serial_writebyte( int fd, char b ) {
+    printf("%02x\n", b);
     return write(fd, &b, 1);
+}
+
+int serial_bytes_available( int fd ) {
+    int bytes_avail;
+    ioctl(fd, FIONREAD, &bytes_avail);
+    return bytes_avail;
 }
 
 /*
 int main() {
-    int fd = serial_open( "/dev/ttyUSB0", B115200);
-    write( fd, "?\r\n", 3);
-    while(1) {
-        char b;
-        if( read(fd, &b, 1) == 1 ) {
-            printf("%c", b);
-        }
+    int fd = serial_open( "/dev/ttyUSB1", B115200);
+    serial_timeout(fd, 0, 5);
+    //write( fd, "?\r\n", 3);
+    int i;
+    for(i = 0; i<256; i++) {
+        unsigned char b,c;
+        c=i;
+        write(fd, &c, 1);
+        read(fd, &b, 1);
+        printf("0x%02X 0x%02X\n", i, b);
+        if ( c != b ) printf("ERROR\n");
     }
     return 0;
 }

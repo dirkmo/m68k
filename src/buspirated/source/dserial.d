@@ -10,38 +10,25 @@ extern (C) int serial_open(const char *port, int baudrate );
 extern (C) int serial_timeout(int fd, int vmin, int vtime);
 extern (C) int serial_readbyte( int fd, char *b );
 extern (C) int serial_writebyte( int fd, char b );
+extern (C) int serial_bytes_available( int fd );
 extern (C) void serial_close( int fd );
 
 class SerialPort {
-	
-	enum baudrates {
-		B9600  = octal!15,
-		B19200 = octal!16,
-		B38400 = octal!17,
-		B57600 = octal!10001,
-		B115200 = octal!10002
-	}
 
-	bool open( string port, int baud ) {
-		int baudrate;
-		switch( baud ) {
-			case 9600: baudrate = baudrates.B9600; break;
-			case 19200: baudrate = baudrates.B19200; break;
-			case 38400: baudrate = baudrates.B38400; break;
-			case 57600: baudrate = baudrates.B57600; break;
-			case 115200: baudrate = baudrates.B115200; break;
-			default: baudrate = baudrates.B115200;
-		}
+	/// open serial port
+	bool open( string port, int baudrate ) {
 		fd = serial_open( std.string.toStringz(port), baudrate );
 		return fd >= 0;
 	}
 
+	/// write data to serial port
 	void write( char[] data ) {
 		foreach ( d ; data ) {
 			serial_writebyte(fd, d);
 		}
 	}
 
+	/// read data from serial port
 	int read( ref char[] data, int count ) {
 		char b;
 		int reccount = 0;
@@ -50,7 +37,6 @@ class SerialPort {
 		}
 		while( count != 0 ) {
 			if( serial_readbyte( fd, &b ) > 0 ) {
-//				std.stdio.write(b);
 				data ~= b;
 				reccount++;
 			} else {
@@ -61,36 +47,43 @@ class SerialPort {
 		return reccount;
 	}
 	
-    /// flush received bytes
+    /// flush received bytes.
+	/// may block if in blocking mode.
 	int flush() {
 		int count = 0;
 		char b;
-		while( serial_readbyte( fd, &b ) > 0 ) {
-			count++;
+		if( serial_bytes_available(fd) > 0 ) {
+			while( serial_readbyte( fd, &b ) > 0 ) {
+				count++;
+			}
 		}
 		return count;
 	}
 
     /// block until charCount characters received.
-    bool block( uint charCount ) {
+    bool modeBlock( uint charCount ) {
         return serial_timeout(fd, charCount, 0) == 0;
     }
 
     /// block until data received or timeout.
-    bool blockWithTimeout( uint timeout_100ms ) {
+    bool modeBlockWithTimeout( uint timeout_100ms ) {
         return serial_timeout(fd, 0, timeout_100ms ) == 0;
     }
 
     /** block until first char received. Then receive until vmin
         chars received or timeout. */
-    bool blockWithInterCharTimeout( uint vmin, uint timeout_100ms ) {
+    bool modeBlockWithInterCharTimeout( uint vmin, uint timeout_100ms ) {
         return serial_timeout(fd, vmin, timeout_100ms ) == 0;
     }
 
     /// non blocking mode
-    bool nonBlocking() {
+    bool modeNonBlocking() {
         return serial_timeout(fd, 0, 0) == 0;
     }
+
+	uint bytesAvailable() {
+		return serial_bytes_available(fd);
+	}
 
 	private:
 		int fd;

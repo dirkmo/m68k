@@ -9,4 +9,6 @@ int serial_readbyte( int fd, char *b );
 
 int serial_writebyte( int fd, char b );
 
+int serial_bytes_available( int fd );
+
 #endif
