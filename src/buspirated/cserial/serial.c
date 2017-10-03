@@ -81,7 +81,6 @@ int serial_timeout(int fd, int vmin, int vtime) {
 }
 
 int serial_open(const char *port, int baudrate ) {
-    printf("Opening port %s\n", port);
     int fd = open(port, O_RDWR | O_NOCTTY /*| O_NDELAY*/);
     if( fd == -1) {
         return -1;
@@ -104,7 +103,7 @@ int serial_readbyte( int fd, char *b ) {
 }
 
 int serial_writebyte( int fd, char b ) {
-    printf("%02x\n", b);
+    //printf("%02x\n", b);
     return write(fd, &b, 1);
 }
 
@@ -133,7 +132,7 @@ int main(int argc, char **argv) {
     }
 
     write( fd, data, argc-2 );
-    usleep(10*1000);
+    usleep(100*1000);
 
     char b;
     while(read(fd, &b, 1) > 0) {

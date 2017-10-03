@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "optional": "c",
+        "system_error": "c",
+        "type_traits": "c"
+    }
+}

@@ -33,24 +33,9 @@ class BusPirate {
         return true;
     }
 
-    /// Enable timeout of 100 ms and try to receive count bytes
-    bool receiveAtLeast( ref char[] data, uint count ) {
-        m_ser.modeBlockWithTimeout(1);
-        char[] rec;
-        int rec_count = 0;
-        while( rec_count < count ) {
-            rec_count += m_ser.read( rec, count );
-            if( rec_count == 0 ) {
-                return false; // timeout
-            }
-            data ~= rec;
-        }
-        return true;
-    }
-
     /// Switch BP to binary mode
     bool switchToModeBinary() {
-        writeln(__FUNCTION__);
+        //writeln(__FUNCTION__);
         m_ser.modeBlockWithTimeout(1);
         m_ser.flush();
         
@@ -67,8 +52,8 @@ class BusPirate {
 
 
         if( m_mode == Mode.unknown || m_mode == Mode.terminal ) {
-            // send 20 times CR
-            data.length = 20;
+            // send 10 times CR
+            data.length = 10;
             data[] = '\r';
             m_ser.write( data );
             Thread.sleep( dur!("msecs")(100) );
@@ -102,14 +87,13 @@ class BusPirate {
 
     /// send command byte and expect 0x01 as answer.
     bool command( char cmd ) {
-        writeln(__FUNCTION__);
+        //writeln(__FUNCTION__);
         m_ser.flush();
         m_ser.modeBlockWithTimeout(5);
         m_ser.write( [ cmd ] );
         char[] cAnswer;
-        int count = m_ser.read( cAnswer, 0 );
-        if( count != 1 || cAnswer[0] != 1 ) {
-            writeln(cAnswer);
+        const int count = m_ser.read( cAnswer, 0 );
+        if( count < 1 || cAnswer[0] != 1 ) {
             return false;
         }
         return true;
@@ -117,7 +101,7 @@ class BusPirate {
 
     /// Switch BP to terminal mode
     bool switchToModeTerminal() {
-        writeln(__FUNCTION__);
+        //writeln(__FUNCTION__);
         m_ser.modeBlockWithTimeout(5);
         m_ser.flush();
         char[] cAnswer;
@@ -126,7 +110,6 @@ class BusPirate {
         if( m_ser.read( cAnswer, 0 ) < 5 || indexOf(to!string(cAnswer), "BBIO1", 0) == -1 ) {
             return false;
         }
-        Thread.sleep(dur!("msecs")(1000));
         if( command( 0x0F ) ) {
             m_mode = Mode.terminal;
             return true;
@@ -134,58 +117,50 @@ class BusPirate {
         m_mode = Mode.unknown;
         return false;
     }
-
-    /// switch BP to SPI mode
+    
     bool switchToModeSpi() {
-        writeln(__FUNCTION__);
-        if( m_mode != Mode.spi ) {
-            if( m_mode != Mode.binary ) {
-                if( ! switchToModeBinary() ) {
-                    return false;
-                }
-            }
-            m_ser.modeBlockWithTimeout(1);
-            m_ser.write( [ 1 ] );
-            string answer;
-            char[] charAnswer;
-            if( m_ser.read( charAnswer, 4 ) == 4 ) {
-                answer = to!string(charAnswer);
-                if( indexOf(answer, "SPI1", 0) == -1 ) {
-                    m_mode = Mode.spi;
-                    return true;
-                }
-            }
-            return false;
-        }
-        // already in spi mode
-        writeln("already in spi mode");
-        return true;
+        //writeln(__FUNCTION__);
+        return switchToMode( Mode.spi );
     }
 
-    /// switch BP to I2C mode
     bool switchToModeI2C() {
-        writeln(__FUNCTION__);
-        if( m_mode != Mode.i2c ) {
+        //writeln(__FUNCTION__);
+        return switchToMode( Mode.i2c );
+    }
+    
+    protected:
+    
+    /// switch BP to SPI or I2C mode
+    bool switchToMode(Mode mode) {
+        //writeln(__FUNCTION__);
+        string sMode;
+        char val;
+        switch(mode) {
+            case Mode.spi: val = 1; sMode = "SPI1"; break;
+            case Mode.i2c: val = 2; sMode = "I2C1"; break;
+            default: return false;
+        }
+        if( m_mode != mode ) {
             if( m_mode != Mode.binary ) {
                 if( ! switchToModeBinary() ) {
                     return false;
                 }
             }
-            m_ser.modeBlockWithTimeout(1);
-            m_ser.write( [ 2 ] );
+            m_ser.flush();
+            m_ser.modeBlockWithTimeout(5);
+            m_ser.write( [ val ] );
             string answer;
             char[] charAnswer;
             if( m_ser.read( charAnswer, 4 ) == 4 ) {
                 answer = to!string(charAnswer);
-                if( indexOf(answer, "I2C1", 0) == -1 ) {
-                    m_mode = Mode.i2c;
+                if( indexOf(answer, sMode, 0) > -1 ) {
+                    m_mode = mode;
                     return true;
                 }
             }
             return false;
         }
-        // already in i2c mode
-        writeln("already in i2c mode");
+        // already in mode
         return true;
     }
 
@@ -210,13 +185,13 @@ int main( string[] args ) {
         return 3;
     }
 
-    if ( ! bp.switchToModeSpi() ) {
-        writefln("Cannot switch to spi mode");
+    if ( ! bp.switchToModeI2C() ) {
+        writefln("Cannot switch to i2c mode");
         //return 3;
     }
 
-    if ( ! bp.switchToModeI2C() ) {
-        writefln("Cannot switch to i2c mode");
+    if ( ! bp.switchToModeSpi() ) {
+        writefln("Cannot switch to spi mode");
         //return 3;
     }
 
