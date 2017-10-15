@@ -1,0 +1,23 @@
+{
+	"name": "dserial",
+	"authors": [
+		"Dirk Möller"
+	],
+	"description": "A minimal serial port library for D.",
+	"copyright": "Copyright © 2017, Dirk Möller",
+	"license": "The I don't care License",
+
+	"sourceFiles": ["cserial/serial.o"],
+
+	"configurations": [
+		{
+			"name": "library",
+			"targetTypef": "library"
+		},
+		{
+			"name": "application",
+			"targetType": "executable"
+		}
+	]
+}
+

@@ -5,5 +5,9 @@
 	],
 	"description": "m68k bootstrapping application",
 	"copyright": "Copyright © 2017, Dirk Möller",
-	"license": "dont care"
+	"license": "dont care",
+
+    "dependencies": {
+        "dserial": {"path": "dserial/"}
+    }
 }
