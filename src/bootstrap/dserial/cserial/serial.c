@@ -8,7 +8,6 @@
 #include <sys/ioctl.h>
 #include <stdlib.h>
 
-#include "serial.h"
 
 static int get_baudrate_value(int baudrate) {
     int value;
@@ -97,14 +96,15 @@ void serial_close( int fd ) {
     }
 }
 
-int serial_readbyte( int fd, char *b ) {
-    int ret = read(fd, b, 1);
+int serial_read( int fd, char *dat, int len ) {
+    int ret = read(fd, dat, len);
+    //printf("%02x\n", *b);
     return ret;
 }
 
-int serial_writebyte( int fd, char b ) {
+int serial_write( int fd, const char *dat, int len ) {
     //printf("%02x\n", b);
-    return write(fd, &b, 1);
+    return write(fd, dat, len);
 }
 
 int serial_bytes_available( int fd ) {
@@ -119,12 +119,11 @@ int main(int argc, char **argv) {
         printf("serial [port] [data]\n");
         return 1;
     }
-    int fd = serial_open( argv[1], B115200);
+    int fd = serial_open( argv[1], 115200);
     if( fd == -1 ) {
         printf("Cannot open port %s\n", argv[1]);
         return 2;
     }
-
     int i;
     char data[argc-2];
     for ( i = 2; i < argc; i++) {

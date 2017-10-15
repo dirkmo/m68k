@@ -1,6 +1,6 @@
 all: serial.o
 
-serial.o: serial.c serial.h
+serial.o: serial.c
 	gcc -c -Wall serial.c -o serial.o
 
 bin: serial.c

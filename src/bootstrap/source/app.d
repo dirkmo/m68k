@@ -1,6 +1,8 @@
 import std.stdio;
 import dserial;
+import portexpander;
 import core.thread;
+
 
 int main(string[] args)
 {
@@ -12,13 +14,14 @@ int main(string[] args)
 	
     p.open(args[1], 115200);
 
-	p.write( ['?', '\r', '\n'] );
+    PortExpander pe = new PortExpander( &p, 0x20 );
 
-	Thread.sleep( dur!("msecs")(500) );
-
-	char[] data;
-	p.read( data, 0 );
-	write(data);
+    if( pe.probeBusPirate() ) {
+        writeln("Bus Pirate gefunden!");
+    } else {
+        writeln("Kein Bus Pirate gefunden.");
+        return 2;
+    }
 
 	return 0;
 }
