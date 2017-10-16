@@ -11,6 +11,7 @@ class PortExpander {
     enum Register {
         IODIR = 0x00,
         GPIO = 0x09,
+        OLAT = 0x0A
     };
 
     enum Port {
@@ -66,9 +67,10 @@ class PortExpander {
         if( !probeBusPirate() ) {
             return false;
         }
-        string line = format!"[0x%u 0x%u 0x%u]\n"(m_i2cAddr, reg, value);
-        m_pSerial.write(line.dup());
-        m_pSerial.flush();
+        string sLine = std.string.format("[0x%02X 0x%02X 0x%02X]\n", m_i2cAddr<<1, reg, value);
+        m_pSerial.write(sLine.dup());
+        char [] line;
+        m_pSerial.read(line, 0);
         return true;
     }
 
@@ -76,7 +78,17 @@ class PortExpander {
        if( !probeBusPirate() ) {
             return false;
         }
-        // TODO: Eines Tages vielleicht...
+        const ubyte ia = cast(ubyte)(m_i2cAddr << 1);
+        m_pSerial.flush();
+        m_pSerial.write( std.string.format("[0x%02X 0x%02X[0x%02X r]\n", ia, reg, ia|1).dup() );
+        char [] line;
+        m_pSerial.read(line, 0);
+        auto p = line.indexOf("READ: ");
+        if( p > -1 ) {
+            p += 8;
+        }
+        value = to!ubyte(line[p..p+2], 16);
+
         return false;
     }
 

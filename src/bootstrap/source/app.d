@@ -33,5 +33,12 @@ int main(string[] args)
         writefln("MCP23017 found on address 0x%02X", pe16.i2cAddr);
     }
 
+    ubyte value;
+    pe8.getRegister( PortExpander.Register.OLAT, value);
+    writefln("Value: %02X", value);    
+    pe8.setRegister(PortExpander.Register.OLAT, 0x78);
+    pe8.getRegister( PortExpander.Register.OLAT, value);
+    writefln("Value: %02X", value);    
+    
 	return 0;
 }
