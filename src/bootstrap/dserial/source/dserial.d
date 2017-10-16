@@ -52,7 +52,6 @@ class SerialPort {
 	}
 	
     /// flush received bytes.
-	/// may block if in blocking mode.
 	int flush() {
 		int count = serial_bytes_available( fd );
 		if( count ) {

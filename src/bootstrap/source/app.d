@@ -3,6 +3,10 @@ import dserial;
 import portexpander;
 import core.thread;
 
+enum Expander {
+    MCP23017 = 0x20,
+    MCP23008 = 0x21
+};
 
 int main(string[] args)
 {
@@ -14,13 +18,19 @@ int main(string[] args)
 	
     p.open(args[1], 115200);
 
-    PortExpander pe = new PortExpander( &p, 0x20 );
+    PortExpander pe16 = new PortExpander( &p, Expander.MCP23017 );
+    PortExpander pe8 = new PortExpander( &p, Expander.MCP23008 );
 
-    if( pe.probeBusPirate() ) {
-        writeln("Bus Pirate gefunden!");
-    } else {
-        writeln("Kein Bus Pirate gefunden.");
+    if( !pe8.probeBusPirate() ) {
+        writeln("No Bus Pirate found.");
         return 2;
+    }
+
+    if( pe8.discover() ) {
+        writefln("MCP23008 found on address 0x%02X", pe8.i2cAddr);
+    }
+    if( pe16.discover() ) {
+        writefln("MCP23017 found on address 0x%02X", pe16.i2cAddr);
     }
 
 	return 0;
