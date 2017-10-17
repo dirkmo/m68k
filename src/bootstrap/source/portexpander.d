@@ -9,14 +9,14 @@ import std.format;
 
 class PortExpander {
     enum Register {
-        IODIR = 0x00,
-        GPIO = 0x09,
-        OLAT = 0x0A
+        iodir = 0x00,
+        gpio  = 0x09,
+        olat  = 0x0A
     };
 
     enum Port {
-        LOW = 0,
-        HIGH = 0x10
+        low = 0,
+        high = 0x10
     };
 
     this( SerialPort* p_pSerial, ubyte p_i2cAddr ) {
@@ -88,24 +88,58 @@ class PortExpander {
             p += 8;
         }
         value = to!ubyte(line[p..p+2], 16);
-
         return false;
     }
 
-    bool setDirPort( Port port, ubyte dir ) {
-        return false;
+    bool setDirPort( Port port, ubyte value ) {
+        const Register reg = cast(Register)(Register.iodir | port);
+        if(port == Port.low) {
+            dirLow = value;
+        } else {
+            dirHigh = value;
+        }
+        return setRegister(reg, value);
     }
 
-    bool setDirBit( Port port, ubyte bit, ubyte dir ) {
-        return false;
+    bool setDirBit( Port port, ubyte bitIndex, bool bitValue ) {
+        if( bitIndex > 7 ) {
+            return false;
+        }
+        const Register reg = cast(Register)(Register.iodir | port);
+        if(port == Port.low) {
+            dirLow  = cast(ubyte)( (dirLow  & (1 << bitIndex)) | (bitValue << bitIndex) );
+        } else {
+            dirHigh = cast(ubyte)( (dirHigh & (1 << bitIndex)) | (bitValue << bitIndex) );
+        }
+        return setRegister(reg, port == Port.low ? dirLow : dirHigh);
     }
 
     bool setLatchPort( Port port, ubyte value ) {
-        return false;
+        const Register reg = cast(Register)(Register.olat | port);
+        if(port == Port.low) {
+            latchLow = value;
+        } else {
+            latchHigh = value;
+        }
+        return setRegister(reg, value);
     }
 
-    bool setLatchBit( Port port, ubyte bit, bool value ) {
-        return false;
+    bool setLatchBit( Port port, ubyte bitIndex, bool bitValue ) {
+       if( bitIndex > 7 ) {
+            return false;
+        }
+        const Register reg = cast(Register)(Register.iodir | port);
+        if(port == Port.low) {
+            latchLow  = cast(ubyte)( (latchLow  & (1 << bitIndex)) | (bitValue << bitIndex) );
+        } else {
+            latchHigh = cast(ubyte)( (latchHigh & (1 << bitIndex)) | (bitValue << bitIndex) );
+        }
+        return setRegister(reg, port == Port.low ? latchLow : latchHigh);
+    }
+
+    bool getGpioPort( Port port, ref ubyte value ) {
+        Register reg = cast(Register)(Register.gpio | port);
+        return getRegister( reg, value );
     }
 
     @property int i2cAddr() { return m_i2cAddr; }

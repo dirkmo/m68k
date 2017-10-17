@@ -34,10 +34,10 @@ int main(string[] args)
     }
 
     ubyte value;
-    pe8.getRegister( PortExpander.Register.OLAT, value);
+    pe8.getRegister( PortExpander.Register.olat, value);
     writefln("Value: %02X", value);    
-    pe8.setRegister(PortExpander.Register.OLAT, 0x78);
-    pe8.getRegister( PortExpander.Register.OLAT, value);
+    pe8.setRegister(PortExpander.Register.olat, 0x78);
+    pe8.getRegister( PortExpander.Register.olat, value);
     writefln("Value: %02X", value);    
     
 	return 0;
