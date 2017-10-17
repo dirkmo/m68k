@@ -1,23 +1,23 @@
 module portexpander;
 
-import dserial;
-import std.stdio;
-import std.string;
 import core.thread;
+import dserial;
 import std.conv;
 import std.format;
+import std.stdio;
+import std.string;
 
 class PortExpander {
     enum Register {
         iodir = 0x00,
         gpio  = 0x09,
         olat  = 0x0A
-    };
+    }
 
     enum Port {
         low = 0,
         high = 0x10
-    };
+    }
 
     this( SerialPort* p_pSerial, ubyte p_i2cAddr ) {
         m_pSerial = p_pSerial;

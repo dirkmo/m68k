@@ -6,17 +6,24 @@ import core.thread;
 enum Expander {
     MCP23017 = 0x20,
     MCP23008 = 0x21
-};
+}
 
 int main(string[] args)
 {
-	if( args.length < 2 ) {
-		writeln("Port name missing");
-		return 1;
+    string port;
+    version(linux) port = "/dev/ttyUSB-lalalala";
+    version(OSX) {
+        port = "/dev/cu.usbserial-AL03NOWB";
+    }
+	if( args.length > 1 ) {
+		port = args[1];
 	}
     SerialPort p = new SerialPort();
 	
-    p.open(args[1], 115200);
+    if( ! p.open(port, 115200) ) {
+        writefln("ERROR: Failed to open port %s", port);
+        return 1;
+    }
 
     PortExpander pe16 = new PortExpander( &p, Expander.MCP23017 );
     PortExpander pe8 = new PortExpander( &p, Expander.MCP23008 );
