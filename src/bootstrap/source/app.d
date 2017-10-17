@@ -11,10 +11,8 @@ enum Expander {
 int main(string[] args)
 {
     string port;
-    version(linux) port = "/dev/ttyUSB-lalalala";
-    version(OSX) {
-        port = "/dev/cu.usbserial-AL03NOWB";
-    }
+    version(linux) { port = "/dev/ttyUSB-lalalala"; }
+    version(OSX)   { port = "/dev/cu.usbserial-AL03NOWB"; }
 	if( args.length > 1 ) {
 		port = args[1];
 	}
