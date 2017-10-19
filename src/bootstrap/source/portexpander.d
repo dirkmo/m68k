@@ -58,7 +58,7 @@ class PortExpander {
         char [] line;
         m_pSerial.read(line, 0);
         if( indexOf( line, std.string.format("WRITE: 0x%02X ACK", i2caddr)) > -1 ) {
-            return true;
+            return getState();
         }
         return false;
     }
@@ -91,53 +91,62 @@ class PortExpander {
         return false;
     }
 
-    bool setDirPort( Port port, ubyte value ) {
+    bool getState() {
+        bool ret;
+        ret = getRegister( cast(Register)(Register.olat | Port.low), olat_low );
+        ret &= getRegister( cast(Register)(Register.olat | Port.high), olat_high );
+        ret &= getRegister( cast(Register)(Register.iodir | Port.low), iodir_low );
+        ret &= getRegister( cast(Register)(Register.iodir | Port.high), iodir_high );
+        return ret;
+    }
+
+    bool setDirPort( ubyte value, Port port = Port.low ) {
         const Register reg = cast(Register)(Register.iodir | port);
         if(port == Port.low) {
-            dirLow = value;
+            iodir_low = value;
         } else {
-            dirHigh = value;
+            iodir_high = value;
         }
         return setRegister(reg, value);
     }
 
-    bool setDirBit( Port port, ubyte bitIndex, bool bitValue ) {
+    bool setDirBit( ubyte bitIndex, bool bitValue, Port port = Port.low ) {
         if( bitIndex > 7 ) {
             return false;
         }
         const Register reg = cast(Register)(Register.iodir | port);
         if(port == Port.low) {
-            dirLow  = cast(ubyte)( (dirLow  & (1 << bitIndex)) | (bitValue << bitIndex) );
+            iodir_low  = cast(ubyte)( (iodir_low  & (1 << bitIndex)) | (bitValue << bitIndex) );
         } else {
-            dirHigh = cast(ubyte)( (dirHigh & (1 << bitIndex)) | (bitValue << bitIndex) );
+            iodir_high = cast(ubyte)( (iodir_high & (1 << bitIndex)) | (bitValue << bitIndex) );
         }
-        return setRegister(reg, port == Port.low ? dirLow : dirHigh);
+        return setRegister(reg, port == Port.low ? iodir_low : iodir_high);
     }
 
-    bool setLatchPort( Port port, ubyte value ) {
+    bool setLatchPort( ubyte value, Port port = Port.low ) {
         const Register reg = cast(Register)(Register.olat | port);
         if(port == Port.low) {
-            latchLow = value;
+            olat_low = value;
         } else {
-            latchHigh = value;
+            olat_high = value;
         }
         return setRegister(reg, value);
     }
 
-    bool setLatchBit( Port port, ubyte bitIndex, bool bitValue ) {
+    bool setLatchBit( ubyte bitIndex, bool bitValue, Port port = Port.low ) {
        if( bitIndex > 7 ) {
             return false;
         }
         const Register reg = cast(Register)(Register.iodir | port);
         if(port == Port.low) {
-            latchLow  = cast(ubyte)( (latchLow  & (1 << bitIndex)) | (bitValue << bitIndex) );
+            olat_low  = cast(ubyte)( (olat_low  & (1 << bitIndex)) | (bitValue << bitIndex) );
         } else {
-            latchHigh = cast(ubyte)( (latchHigh & (1 << bitIndex)) | (bitValue << bitIndex) );
+            olat_high = cast(ubyte)( (olat_high & (1 << bitIndex)) | (bitValue << bitIndex) );
         }
-        return setRegister(reg, port == Port.low ? latchLow : latchHigh);
+        return setRegister(reg, port == Port.low ? olat_low : olat_high);
     }
 
-    bool getGpioPort( Port port, ref ubyte value ) {
+    bool getGpioPort( ref ubyte value, Port port = Port.low ) {
         Register reg = cast(Register)(Register.gpio | port);
         return getRegister( reg, value );
     }
@@ -149,8 +158,8 @@ class PortExpander {
         ubyte m_i2cAddr;
         bool m_bpIsOkay = false;
 
-        ubyte latchLow = 0;
-        ubyte latchHigh = 0;
-        ubyte dirLow = 0xFF;
-        ubyte dirHigh = 0xFF;
+        ubyte olat_low = 0;
+        ubyte olat_high = 0;
+        ubyte iodir_low = 0xFF;
+        ubyte iodir_high = 0xFF;
 }

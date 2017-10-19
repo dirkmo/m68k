@@ -9,5 +9,22 @@
 
     "dependencies": {
         "dserial": {"path": "dserial/"}
-    }
+	},
+	
+	"configurations": [
+		{
+			"name": "bootstrap",
+			"targetType": "executable",
+			"mainSourceFile": "source/app.d",
+			"excludedSourceFiles": [ "source/reset.d" ],
+			"targetName": "bootstrap"
+		},
+		{
+			"name": "reset",
+			"targetType": "executable",
+			"mainSourceFile": "source/reset.d",
+			"excludedSourceFiles": [ "source/app.d" ],
+			"targetName": "reset"
+		}
+	]
 }
