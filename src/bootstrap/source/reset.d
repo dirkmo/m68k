@@ -45,15 +45,14 @@ int main(string[] args)
     }
 
     if( param == "0" || param == "" ){
-        pe8.setDirBit( cast(ubyte)Pins.reset, false );
-        pe8.setDirBit( cast(ubyte)Pins.halt, false );
-        pe8.setLatchBit( cast(ubyte)Pins.reset, false );
-        pe8.setLatchBit( cast(ubyte)Pins.halt, false );
+        ubyte mask = cast(ubyte)(Pins.reset | Pins.halt);
+        pe8.iodir = pe8.iodir | mask;
+        pe8.olat = pe8.olat & ~mask;
         writeln("reset_n, halt_n low.");
     }
     if( param == "1" || param == "" ) {
-        pe8.setLatchBit( cast(ubyte)Pins.reset, true );
-        pe8.setLatchBit( cast(ubyte)Pins.halt, true );
+        ubyte mask = cast(ubyte)(Pins.reset | Pins.halt);
+        pe8.olat = pe8.olat | mask;
         writeln("reset_n, halt_n high.");
     }
 

@@ -93,9 +93,9 @@ class PortExpander {
 
     bool getState() {
         bool ret;
-        ret = getRegister( cast(Register)(Register.olat | Port.low), olat_low );
-        ret &= getRegister( cast(Register)(Register.olat | Port.high), olat_high );
-        ret &= getRegister( cast(Register)(Register.iodir | Port.low), iodir_low );
+        ret  = getRegister( cast(Register)(Register.olat  | Port.low ), olat_low );
+        ret &= getRegister( cast(Register)(Register.olat  | Port.high), olat_high );
+        ret &= getRegister( cast(Register)(Register.iodir | Port.low ), iodir_low );
         ret &= getRegister( cast(Register)(Register.iodir | Port.high), iodir_high );
         return ret;
     }
@@ -150,8 +150,57 @@ class PortExpander {
         Register reg = cast(Register)(Register.gpio | port);
         return getRegister( reg, value );
     }
+    
+   @property ubyte gpio() {
+        ubyte value;
+        getGpioPort( value );
+        return value;
+    }
 
-    @property int i2cAddr() { return m_i2cAddr; }
+    @property ushort gpio16() {
+        ushort val16;
+        ubyte val8;
+        getGpioPort( val8 );
+        val16 = val8;
+        getGpioPort( val8, Port.high );
+        val16 |= val8 << 8;
+        return val16;
+    }  
+
+    @property ubyte iodir()    { return iodir_low; }
+
+    @property ushort iodir16() { return (iodir_high << 8) | iodir_low; }
+
+    @property ubyte iodir(ubyte iodir) {
+        iodir_low = iodir;
+        setDirPort( iodir_low );
+        return iodir;
+    }
+    @property ushort iodir16( ushort iodir16 ) {
+        iodir_low = iodir16 & 0xFF;
+        iodir_high = (iodir16 >> 8) & 0xFF;
+        setDirPort( iodir_low );
+        setDirPort( iodir_high, Port.high );
+        return iodir16;
+    }
+
+    @property ubyte olat()    { return olat_low; }
+    @property ushort olat16() { return (olat_high << 8) | olat_low; }
+
+    @property ubyte olat(ubyte olat) {
+        olat_low = olat;
+        setLatchPort( olat_low );
+        return olat;
+    }
+    @property ushort olat16( ushort olat16 ) {
+        olat_low = olat16 & 0xFF;
+        olat_high = (olat16 >> 8) & 0xFF;
+        setLatchPort( olat_low );
+        setLatchPort( olat_high, Port.high );
+        return olat16;
+    }
+
+    @property ubyte i2cAddr() { return m_i2cAddr; }
 
     private:
         SerialPort *m_pSerial;
