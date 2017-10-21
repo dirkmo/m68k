@@ -86,8 +86,9 @@ class PortExpander {
         auto p = line.indexOf("READ: ");
         if( p > -1 ) {
             p += 8;
+            value = to!ubyte(line[p..p+2], 16);
+            return true;
         }
-        value = to!ubyte(line[p..p+2], 16);
         return false;
     }
 

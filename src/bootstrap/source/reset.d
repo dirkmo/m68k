@@ -19,7 +19,7 @@ enum Pins {
 int main(string[] args)
 {
     string port;
-    version(linux) { port = "/dev/ttyUSB-lalalala"; }
+    version(linux) { port = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AL03NOWB-if00-port0"; }
     version(OSX)   { port = "/dev/cu.usbserial-AL03NOWB"; }
     string param;
 	if( args.length > 1 ) {
@@ -44,15 +44,20 @@ int main(string[] args)
         return 3;
     }
 
+    ubyte mask = cast(ubyte)(1<<Pins.reset | 1<<Pins.halt);
+    writefln("mask: %02X", mask);
+
     if( param == "0" || param == "" ){
-        ubyte mask = cast(ubyte)(Pins.reset | Pins.halt);
-        pe8.iodir = pe8.iodir | mask;
+        pe8.iodir = pe8.iodir & ~mask;
         pe8.olat = pe8.olat & ~mask;
+        writefln("iodir: %02X", pe8.iodir);
+        writefln("olat: %02X", pe8.olat);
         writeln("reset_n, halt_n low.");
     }
     if( param == "1" || param == "" ) {
-        ubyte mask = cast(ubyte)(Pins.reset | Pins.halt);
         pe8.olat = pe8.olat | mask;
+        writefln("iodir: %02X", pe8.iodir);
+        writefln("olat: %02X", pe8.olat);
         writeln("reset_n, halt_n high.");
     }
 
