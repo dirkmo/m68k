@@ -4,8 +4,8 @@ import std.stdio;
 
 class DataBus : PortExpander {
 
-    this( SerialPort* p_pSerial ) {
-        super(p_pSerial, 0x20);
+    this( SerialPort serial ) {
+        super(serial, 0x20);
     }
 
     bool init() {

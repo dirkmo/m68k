@@ -4,8 +4,8 @@ import std.stdio;
 
 class Control : PortExpander {
 
-    this( SerialPort* p_pSerial ) {
-        super(p_pSerial, 0x21);
+    this( SerialPort serial ) {
+        super(serial, 0x21);
     }
 
     bool init() {

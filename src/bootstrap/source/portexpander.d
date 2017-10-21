@@ -19,10 +19,10 @@ class PortExpander {
         high = 0x10
     }
 
-    this( SerialPort* p_pSerial, ubyte p_i2cAddr ) {
-        m_pSerial = p_pSerial;
+    this( SerialPort serial, ubyte p_i2cAddr ) {
+        m_serial = serial;
         m_i2cAddr = p_i2cAddr;
-        m_pSerial.modeBlockWithInterCharTimeout(1,5);
+        m_serial.modeBlockWithInterCharTimeout(1,5);
     }
 
     bool probeBusPirate() {
@@ -30,21 +30,21 @@ class PortExpander {
             return true;
         }
         m_bpIsOkay = false;
-        m_pSerial.write( "\n\n\n".dup() );
+        m_serial.write( "\n\n\n".dup() );
 
         Thread.sleep( dur!("msecs")(200) );
-        m_pSerial.flush();
-        m_pSerial.write( "i\n".dup() );
+        m_serial.flush();
+        m_serial.write( "i\n".dup() );
         Thread.sleep( dur!("msecs")(200) );
         char[] line;
-        m_pSerial.read(line, 0);
+        m_serial.read(line, 0);
         if( indexOf(line,"Bus Pirate") == -1 ) {
             return false;
         }
         m_bpIsOkay = true;
-        m_pSerial.write( "m 4 4\nW\n".dup() );
+        m_serial.write( "m 4 4\nW\n".dup() );
         Thread.sleep( dur!("msecs")(200) );
-        m_pSerial.read(line, 0); // wait and read whats available
+        m_serial.read(line, 0); // wait and read whats available
         return m_bpIsOkay;
     }
 
@@ -53,10 +53,10 @@ class PortExpander {
             return false;
         }
         const ubyte i2caddr = cast(ubyte)(m_i2cAddr << 1);
-        m_pSerial.flush();
-        m_pSerial.write( std.string.format("[0x%02X]\n", m_i2cAddr << 1).dup() );
+        m_serial.flush();
+        m_serial.write( std.string.format("[0x%02X]\n", m_i2cAddr << 1).dup() );
         char [] line;
-        m_pSerial.read(line, 0);
+        m_serial.read(line, 0);
         if( indexOf( line, std.string.format("WRITE: 0x%02X ACK", i2caddr)) > -1 ) {
             return getState();
         }
@@ -68,9 +68,9 @@ class PortExpander {
             return false;
         }
         string sLine = std.string.format("[0x%02X 0x%02X 0x%02X]\n", m_i2cAddr<<1, reg, value);
-        m_pSerial.write(sLine.dup());
+        m_serial.write(sLine.dup());
         char [] line;
-        m_pSerial.read(line, 0);
+        m_serial.read(line, 0);
         return true;
     }
 
@@ -79,10 +79,10 @@ class PortExpander {
             return false;
         }
         const ubyte ia = cast(ubyte)(m_i2cAddr << 1);
-        m_pSerial.flush();
-        m_pSerial.write( std.string.format("[0x%02X 0x%02X[0x%02X r]\n", ia, reg, ia|1).dup() );
+        m_serial.flush();
+        m_serial.write( std.string.format("[0x%02X 0x%02X[0x%02X r]\n", ia, reg, ia|1).dup() );
         char [] line;
-        m_pSerial.read(line, 0);
+        m_serial.read(line, 0);
         auto p = line.indexOf("READ: ");
         if( p > -1 ) {
             p += 8;
@@ -204,7 +204,7 @@ class PortExpander {
     @property ubyte i2cAddr() { return m_i2cAddr; }
 
     private:
-        SerialPort *m_pSerial;
+        SerialPort m_serial;
         ubyte m_i2cAddr;
         bool m_bpIsOkay = false;
 

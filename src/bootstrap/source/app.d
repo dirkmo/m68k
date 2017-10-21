@@ -28,14 +28,14 @@ void init( string[] args ) {
         exit(1);
     }
 
-    ctrl = new Control( &serialport );
+    ctrl = new Control( serialport );
 
     if( !ctrl.init() ) {
         writeln("MCP23008 not found.");
         exit(2);
     }
 
-    DataBus db = new DataBus( &serialport );
+    db = new DataBus( serialport );
     if( !db.init() ) {
         writeln("MCP23017 not found.");
         exit(3);
@@ -66,6 +66,8 @@ int main(string[] args)
     init( args );
     writeln("Portexpander ready.");
     writeln("Putting MC68SEC000 into reset...");
+
+    db.highz();
 
     ctrl.reset = true;
     // bootstrap mode starten
