@@ -14,13 +14,10 @@ SerialPort serialport;
 Control ctrl;
 DataBus db;
 
-void init( string[] args ) {
+void init() {
     string port;
     version(linux) { port = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AL03NOWB-if00-port0"; }
     version(OSX)   { port = "/dev/cu.usbserial-AL03NOWB"; }
-	if( args.length > 1 ) {
-		port = args[1];
-	}
     serialport = new SerialPort();
 	
     if( ! serialport.open(port, 115200) ) {
@@ -29,7 +26,6 @@ void init( string[] args ) {
     }
 
     ctrl = new Control( serialport );
-
     if( !ctrl.init() ) {
         writeln("MCP23008 not found.");
         exit(2);
@@ -42,30 +38,23 @@ void init( string[] args ) {
     }
 }
 
-
-void write_word( ushort value ) {
-    enum NOP = 0x1234;
+void write_word( ushort eeprom_value, ushort cpu_value ) {
     ctrl.rw = 1;
-    ctrl.reset = false;
-    // cpu wartet nun auf erstes Wort
-
     // EEProm beschreiben
-    db.output( value );
+    db.output( eeprom_value );
+    writefln("db->eeprom( %04X );", eeprom_value); readln();
     ctrl.rw = 0;
     ctrl.rw = 1;
 
-    // CPU ein NOP geben
-    db.output( NOP );
+    db.output( cpu_value );
+    writefln("db->cpu( %04X );", cpu_value); readln();
     ctrl.dtack();
-
 }
 
 int main(string[] args)
 {
     writeln("m68k Bootstrap program");
-    init( args );
-    writeln("Portexpander ready.");
-    writeln("Putting MC68SEC000 into reset...");
+    init();
 
     db.highz();
 
@@ -75,15 +64,34 @@ int main(string[] args)
     // cpu laufen lassen
     ctrl.reset = false;
 
-    write_word( 0 );
+    enum NOP = 0x714E;
 
-    // bootstrap mode beenden
-    ctrl.boot(false);
+    ushort[] data = [
+        //0x0010, 0x0000, 0x0000, 0x0008, 0x4efa, 0xfffe
+        0x1000, 0x0000, 0x0000, 0x0800, 0xfa4e, 0xfeff
+    ];
     
+    int i;
+    // SP und Resetvektor
+    for ( i = 0; i<4; i++ ) {
+        writef("%04X ", data[i]);
+        write_word(data[i], data[i]);
+    }
+    writeln("Start");
+    while(true) {
+        //writef("%04X ", data[i]);
+        //write_word(data[i], NOP);
+        writef("%04X ", NOP);
+        write_word(NOP, NOP);
+    }
+
+/*
+    writeln();
     // restart cpu
     ctrl.reset = true;
     db.highz();
+    // bootstrap mode beenden
     ctrl.highz();
-    
-	return 0;
+  */  
+	//return 0;
 }

@@ -11,13 +11,16 @@ class PortExpander {
     enum Register {
         iodir = 0x00,
         gpio  = 0x09,
-        olat  = 0x0A
+        olat  = 0x0A,
+        iocon = 0x0B // wenn BANK=0
     }
 
     enum Port {
         low = 0,
         high = 0x10
     }
+
+    enum BANK1 = 0x80;
 
     this( SerialPort serial, ubyte p_i2cAddr ) {
         m_serial = serial;
@@ -57,8 +60,10 @@ class PortExpander {
         m_serial.write( std.string.format("[0x%02X]\n", m_i2cAddr << 1).dup() );
         char [] line;
         m_serial.read(line, 0);
-        if( indexOf( line, std.string.format("WRITE: 0x%02X ACK", i2caddr)) > -1 ) {
-            return getState();
+        if( setupBanks() ) {
+            if( indexOf( line, std.string.format("WRITE: 0x%02X ACK", i2caddr)) > -1 ) {
+                return getState();
+            }
         }
         return false;
     }
@@ -69,6 +74,7 @@ class PortExpander {
         }
         string sLine = std.string.format("[0x%02X 0x%02X 0x%02X]\n", m_i2cAddr<<1, reg, value);
         m_serial.write(sLine.dup());
+        Thread.sleep( dur!("msecs")(100) );
         char [] line;
         m_serial.read(line, 0);
         return true;
@@ -81,6 +87,7 @@ class PortExpander {
         const ubyte ia = cast(ubyte)(m_i2cAddr << 1);
         m_serial.flush();
         m_serial.write( std.string.format("[0x%02X 0x%02X[0x%02X r]\n", ia, reg, ia|1).dup() );
+        Thread.sleep( dur!("msecs")(100) );
         char [] line;
         m_serial.read(line, 0);
         auto p = line.indexOf("READ: ");
@@ -98,6 +105,15 @@ class PortExpander {
         ret &= getRegister( cast(Register)(Register.olat  | Port.high), olat_high );
         ret &= getRegister( cast(Register)(Register.iodir | Port.low ), iodir_low );
         ret &= getRegister( cast(Register)(Register.iodir | Port.high), iodir_high );
+        return ret;
+    }
+
+    bool setupBanks() {
+        // enable banked register map, IOCON.BANK=1
+        ubyte iocon;
+        bool ret = getRegister( Register.iocon, iocon );
+        iocon |= BANK1;
+        ret &= setRegister( Register.iocon, iocon );
         return ret;
     }
 
